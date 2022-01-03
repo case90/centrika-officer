@@ -10,7 +10,7 @@ export default (reducer, actions, initialState) => {
         const boundActions = {}
         for (let key in actions) {
             // key === 'testFunctionName'
-            boundActions[key] = actions[key](dispatch)
+            boundActions[key] = actions[key](dispatch, state)
         }
         
         return (

@@ -10,7 +10,11 @@ const useHandleOnChangeTextInput = (fields) => {
         })
     }
 
-    return [inputState, handleInputChange]
+    const clearFields = () => {
+        setInputState(fields);
+    }
+
+    return [inputState, handleInputChange, clearFields]
 }
 
 export default useHandleOnChangeTextInput
