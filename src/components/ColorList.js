@@ -16,7 +16,7 @@ const ColorList = ({ data, value, getSelectedColor }) => {
                             onPress={() => getSelectedColor(item.id)}>
                             <View 
                                 style={[ { borderColor:item.background_color }, value === item.id ? styles.activeItem : styles.itemStyle ]}>
-                                <Icon type='font-awesome' name='car' size={25} color={value === item.id ? '#fff' : item.background_color} />
+                                <Icon type='font-awesome' name={item.icon} size={25} color={value === item.id ? '#fff' : item.background_color} />
                             </View>
                             <Text style={tw`text-center text-black`}>{item.description}</Text>
                         </TouchableOpacity>
