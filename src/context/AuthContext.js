@@ -74,10 +74,18 @@ const tryLocalSignin = (dispatch) => {
 }
 
 const signin = (dispatch) => {
-    return async ({ email, password }) => {
-        dispatch({type: 'FETCHING_DATA', payload: { fetchingData: true } });
+    return async (data) => {
         try {
-            tryAuth(email, password, dispatch);
+            const fields = validateFieldsData(data);
+            if(!fields.error){
+                dispatch({type: 'FETCHING_DATA', payload: { fetchingData: true } });
+                tryAuth(data.email, data.password, dispatch);
+            }else{
+                throwAlertError(
+                    "Error en autentificacion", 
+                    fields.message,
+                );
+            }
         } catch (error) {
             dispatch({ 
                 type: 'SET_REQUEST_ERROR', 
@@ -90,6 +98,25 @@ const signin = (dispatch) => {
     }
 }
 
+const validateFieldsData = (data) => {
+
+    if(!data?.email){
+        return { 
+            error: true, 
+            message: 'El correo electrónico es requerido.'
+        }
+    }
+    
+    if(!data?.password){
+        return {
+            error: true, 
+            message: 'La contraseña es requerida.'
+        }
+    }
+
+    return { error: false, message: '' }
+}
+
 const signout = (dispatch) => {
     return async () => {
         await AsyncStorage.removeItem('user')
@@ -100,11 +127,11 @@ const signout = (dispatch) => {
 const tryAuth = async (email, password, dispatch) => {
     dispatch({type: 'FETCHING_DATA', payload: { fetchingData: true } });
     const response = await httpClient.post('auth/login', {email, password})
-    if ('errors' in response){
+    if (!response.status){
         dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
         throwAlertError(
             "Error en autentificacion", 
-            response.errors,
+            response.message,
         );
     }else{
         const user = { ...response.user, token: `${response.token_type} ${response.token}`, expires_at: response.expires_at }
