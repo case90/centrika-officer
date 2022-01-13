@@ -24,11 +24,6 @@ const HomeScreen = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('InvitationList')}>
-                        <MainMenuOption icon="calendar" title="Invitaciones anteriores" size={39}/>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.button}
                     onPress={() => signout()}>
                         <MainMenuOption icon="sign-out" title="Salir" size={39}/>
                 </TouchableOpacity>
