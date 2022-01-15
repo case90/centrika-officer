@@ -7,6 +7,7 @@ import { Context as AuthContext} from './../context/AuthContext';
 import { Provider as InvitationFormProvider } from './../context/InvitationFormContext'
 import { navigationRef } from './../helpers/rootNavigation'
 import HomeScreen from './../screens/HomeScreen'
+import ScannerScreen from './../screens/ScannerScreen'
 import CreateInvitationScreen from './../screens/CreateInvitationScreen'
 
 const Drawer = createDrawerNavigator();
@@ -24,6 +25,10 @@ const MainLayout = () => {
                 <DrawerItem
                     label="Nueva invitación"
                     onPress={() => props.navigation.navigate('CreateInvitation')}
+                />
+                <DrawerItem
+                    label="Escaner"
+                    onPress={() => props.navigation.navigate('Scanner')}
                 />
                 <DrawerItem
                     label="Salir"
@@ -61,6 +66,13 @@ const MainLayout = () => {
                         <Drawer.Screen 
                             name="CreateInvitation" 
                             component={CreateInvitationScreen} 
+                            options={{
+                                title: 'Crear invitación',
+                            }}
+                        />
+                        <Drawer.Screen 
+                            name="Scanner" 
+                            component={ScannerScreen} 
                             options={{
                                 title: 'Crear invitación',
                             }}
