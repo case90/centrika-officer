@@ -1,8 +1,12 @@
 import React, { useEffect, useReducer } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import httpClient from '../services/httpClient'
 import { Camera } from 'expo-camera';
 import { Icon } from 'react-native-elements'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import tw from 'tailwind-react-native-classnames';
 
 const initialState = {
     error: false,
@@ -11,20 +15,26 @@ const initialState = {
     scanned: false,
     fetchingData: false,
     hasPermission: false,
-    type: Camera.Constants.Type.back
+    type: Camera.Constants.Type.back,
+    data: null,
 }
 
 const qrScannerReducer = (state = initialState, action) => {
 
     switch(action.type){
         case 'CLEAR_STATE':
-            return { ...initialState }
-        case 'SET_VALID_SCANNED_CODE':
+            return { 
+                ...initialState, 
+                hasPermission: state.hasPermission,
+                scanned: false,
+                data: null,
+            }
+        case 'SET_INVITATION_DATA':
             return { 
                 ...state, 
-                fetchingData: action.payload.fetchingData, 
-                isValidCode: action.payload.isValidCode, 
-                scanned: action.payload.scanned, 
+                data: action.payload.data,
+                fetchingData: false, 
+                scanned: true, 
             }
         case 'SET_SUCCESS_PERMISSION':
             return { ...state, hasPermission: action.payload }
@@ -67,6 +77,7 @@ const validateQrCode = (code) => {
 }
 
 const ScannerScreen = () => {
+    const navigation = useNavigation();
     const isFocused = useIsFocused();
     const [state, dispatch] = useReducer(qrScannerReducer, initialState);
 
@@ -74,18 +85,16 @@ const ScannerScreen = () => {
         dispatch({type: 'CLEAR_STATE' });
     }
 
-    const handleBarCodeScanned = ({ data }) => {
-        dispatch({ 
-            type: 'FETCHING_DATA',
-            payload: { fetchingData: true, scanned: true, isValidCode: true }
-        });
-        console.log(data)
+    const handleBarCodeScanned = async({ data }) => {
         if(validateQrCode(data)){
             dispatch({ 
-                type: 'SET_VALID_SCANNED_CODE',
-                payload: { isValidCode: true, fetchingData: false, scanned: true }
+                type: 'FETCHING_DATA',
+                payload: { fetchingData: true, scanned: true, isValidCode: true }
             });
-            console.log('codigo escaneado ', data)
+            const user = JSON.parse(await AsyncStorage.getItem('user'));
+            const token = user.token
+            const invitation = await httpClient.get(`invitations/${data}`, {'Authorization': token});
+            dispatch({ type: 'SET_INVITATION_DATA',  payload: { data: invitation } });
         }else{
             dispatch({ 
                 type: 'SET_INVALID_SCANNED_CODE',
@@ -93,6 +102,10 @@ const ScannerScreen = () => {
                     isValidCode: false, message: 'El código QR escaneado no es un codigo valido.' }
             });
         }
+    }
+
+    const loadData = (data) => {
+        navigation.navigate('CreateInvitation', { data })
     }
     
     const setScannedStatus = (status) => {
@@ -141,17 +154,32 @@ const ScannerScreen = () => {
                             <View style={{ flex: 5, backgroundColor: 'transparent' }} />
                             <View style={{ flex: 1, backgroundColor: opacity }} />
                         </View>
-                        <View style={{ flex: 3, backgroundColor: opacity, justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ flex: 3, backgroundColor: opacity }}>
                             {state.scanned && !state.fetchingData ?
-                                <TouchableOpacity onPress={() => setScannedStatus(!state.scanned)}>
-                                    <Icon raised name='qrcode' type='font-awesome' color='black' />
-                                </TouchableOpacity>
+                                <View style={tw`flex-1 flex-row justify-evenly items-center`}>
+                                    <TouchableOpacity
+                                        style={tw`w-4/12 p-3 bg-white rounded-lg`}
+                                        onPress={() => setScannedStatus(!state.scanned)}>
+                                        <View style={tw`flex-row`}>
+                                            <Icon name='qrcode' type='font-awesome' color='black' />
+                                            <Text style={tw`ml-3 text-center`}>Escanear</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity 
+                                        style={tw`w-4/12 p-3 bg-white rounded-lg`}
+                                        onPress={() => loadData(state.data)}>
+                                        <View style={tw`flex-row`}>
+                                            <Icon name='hdd-o' type='font-awesome' color='black' />
+                                            <Text style={tw`ml-3 text-center`}>Cargar</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                                 :
                                 null
                             }
 
-                            { state.fetchingData && <ActivityIndicator size="large" color="#ffffff" /> }
-
+                            { state.fetchingData && <ActivityIndicator style={tw`mt-5`} size="large" color="#ffffff" /> }
+                            
                             {
                                 (!state.isValidCode && state.scanned) &&
                                 Alert.alert(
