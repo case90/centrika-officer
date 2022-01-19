@@ -79,6 +79,7 @@ const ScannerScreen = () => {
             type: 'FETCHING_DATA',
             payload: { fetchingData: true, scanned: true, isValidCode: true }
         });
+        console.log(data)
         if(validateQrCode(data)){
             dispatch({ 
                 type: 'SET_VALID_SCANNED_CODE',

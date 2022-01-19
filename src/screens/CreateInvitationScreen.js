@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native'
-import { Button, Icon } from 'react-native-elements';
+import { Input, Button, Icon } from 'react-native-elements';
 import { Context as InvitationFormContext} from './../context/InvitationFormContext';
 import InvitedForm from './../components/invitation/InvitedForm';
 import ProviderForm from './../components/invitation/ProviderForm';
 import ServiceForm from './../components/invitation/ServiceForm';
 import DateRange from './../components/DateRange';
+import ColorList from './../components/ColorList';
 import { INVITED_ENTRY_TYPE, SERVICE_ENTRY_TYPE, PROVIDER_ENTRY_TYPE } from './../config/defines';
 import tw from 'tailwind-react-native-classnames';
 
@@ -24,8 +25,8 @@ const CreateInvitationScreen = ({ route, navigation }) => {
         if(route.params?.data){
             loadInvitation(route.params?.data);
         }
-            
-        if(!state.car_colors || !state.neighbor_id || !state.address_id){
+
+        if(state.car_colors.length === 0 || state.streets.length === 0){
             initDefaultState();
         }
             
@@ -53,20 +54,39 @@ const CreateInvitationScreen = ({ route, navigation }) => {
             <ScrollView 
             showsVerticalScrollIndicator={false}>
                 <View style={tw`p-4`}>
-                    <Text style={tw`text-black text-base font-thin`}>Nombre del vecino</Text>
-                    <Text style={tw`text-gray-500 text-base font-thin mb-2`}>{state.neighbor_name}</Text>
-                    <Text style={tw`text-black text-base font-thin`}>Dirección</Text>
-                    <Text style={tw`text-gray-500 text-base font-thin mb-2`}>{state.address_text}</Text>
-                    <DateRange 
-                        titleInitialDate="Fecha de entrada"
-                        titleFinalDate="Fecha de salida"
-                        clearDates={state.data.length !== 0 ? false : true}
-                        onChangeInitialDate={(date) => {
-                            date ? handleSelectedDates(date, 'initial_date') : null;
-                        }}
-                        onChangeFinalDate={(date) => {
-                            date ? handleSelectedDates(date, 'final_date') : null;
-                        }}
+                    <Text style={tw`text-black mb-3 text-lg font-bold`}>Agregar entrada</Text>
+                    <Button
+                        containerStyle={tw`w-3/6 mb-3`}
+                        buttonStyle={styles.primaryButton}
+                        titleStyle={styles.primaryTitleButton}
+                        icon={<Icon name="qrcode" type='font-awesome' size={15} color={"#ffffff"} />}
+                        title="Escanear QR"
+                        onPress={() => navigation.navigate('Scanner')}
+                    />
+                    <Text style={tw`text-black mb-3 text-base font-thin`}>Buscar placas de carro</Text>
+                    <Input
+                        rightIcon={<Icon type='font-awesome' name='search' size={25} color='#118ea6' />}
+                        inputStyle={tw`ml-3 text-sm`}
+                        inputContainerStyle={tw`border pl-2 pr-2 rounded-md`}
+                        containerStyle={tw`flex-1 p-0`}
+                        labelStyle={{ color: '#133C60' }}
+                        placeholder="Seleccione fecha"
+                        value="RMK123"
+                    />
+                    <Text style={tw`text-black mb-3 text-base font-thin`}>Calle</Text>
+                    <ColorList
+                        data={state.streets}
+                        getSelectedColor={(item) => console.log(item)}
+                    />
+                    <Text style={tw`text-black mb-3 text-base font-thin`}>Número</Text>
+                    <Input
+                        rightIcon={<Icon type='font-awesome' name='search' size={25} color='#118ea6' />}
+                        inputStyle={tw`ml-3 text-sm`}
+                        inputContainerStyle={tw`border pl-2 pr-2 rounded-md`}
+                        containerStyle={tw`flex-1 p-0`}
+                        labelStyle={{ color: '#133C60' }}
+                        placeholder="Seleccione fecha"
+                        value="RMK123"
                     />
                     <Text style={tw`text-black text-xl font-thin mb-2`}>Tipo de entrada</Text>
                     <View style={tw`flex-row justify-between mb-4`}>

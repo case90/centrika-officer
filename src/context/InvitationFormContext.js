@@ -10,15 +10,13 @@ const initialState = {
     error: false,
     message: "",
     fetchingData: false,
-    neighbor_id: null,
-    neighbor_name: "",
-    address_id: null,
-    address_text: "",
     initial_date: "",
     final_date: "",
     car_colors: [],
+    streets: [],
     incoming_type_id: INVITED_ENTRY_TYPE,
     data: [],
+    user: null
 }
 
 const invitationFormReducer = (state = initialState, action) => {
@@ -27,11 +25,8 @@ const invitationFormReducer = (state = initialState, action) => {
         case 'CLEAR_STATE':
             return { 
                 ...initialState,
-                neighbor_id: state.neighbor_id,
-                neighbor_name: state.neighbor_name,
-                address_id: state.address_id,
-                address_text: state.address_text,
                 car_colors: state.car_colors,
+                streets: state.streets,
             }
         case 'FETCHING_DATA':
             return { ...state, fetchingData: action.payload.fetchingData }
@@ -48,14 +43,12 @@ const invitationFormReducer = (state = initialState, action) => {
             return { ...state, initial_date: action.payload.initial_date }
         case 'SET_FINAL_DATE':
             return { ...state, final_date: action.payload.final_date }
-        case 'SET_NEIGHBOR_DATA':
+        case 'SET_FORM_INITIAL_DATA':
             return { 
-                ...state, 
-                neighbor_id: action.payload.neighbor_id,
-                neighbor_name: action.payload.neighbor_name,
-                address_id: action.payload.address_id,
-                address_text: action.payload.address_text,
+                ...state,
                 car_colors: action.payload.car_colors,
+                user: action.payload.user,
+                streets: action.payload.streets,
                 fetchingData: false,
                 error: false,
                 message: ""
@@ -76,10 +69,6 @@ const invitationFormReducer = (state = initialState, action) => {
         case 'LOAD_INVITATION_DATA':
             return { 
                 ...state,
-                neighbor_id: action.payload.address.neighbor.id,
-                neighbor_name: action.payload.address.neighbor.name,
-                address_id: action.payload.address.id,
-                address_text: action.payload.address.street.description,
                 incoming_type_id:  parseInt(action.payload.incoming_type_id),
                 data: action.payload.data,
                 fetchingData: false
@@ -102,20 +91,15 @@ const initDefaultState = (dispatch) => {
             dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
             const user = JSON.parse(await AsyncStorage.getItem('user'));
             const token = user.token
-            const response = await httpClient
-                .get(`car_colors`, {
-                    'Authorization': token,
-                }
-            );
-            if(response){
+            const colors = await httpClient.get(`car_colors`, {'Authorization': token});
+            const streets = await httpClient.get(`streets`, {'Authorization': token});
+            if(colors){
                 dispatch({
-                    type: 'SET_NEIGHBOR_DATA', 
+                    type: 'SET_FORM_INITIAL_DATA', 
                     payload: { 
-                        neighbor_id: user.neighbor.id,
-                        neighbor_name: user.neighbor.name,
-                        address_id: user.neighbor.address.id,
-                        address_text: user.neighbor.address.address_text,
-                        car_colors: response
+                        car_colors: colors,
+                        user,
+                        streets
                     } 
                 });
             }else{

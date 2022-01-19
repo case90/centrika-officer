@@ -27,10 +27,6 @@ const MainLayout = () => {
                     onPress={() => props.navigation.navigate('CreateInvitation')}
                 />
                 <DrawerItem
-                    label="Escaner"
-                    onPress={() => props.navigation.navigate('Scanner')}
-                />
-                <DrawerItem
                     label="Salir"
                     onPress={() => signout()}
                 />
