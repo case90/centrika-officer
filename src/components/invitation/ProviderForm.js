@@ -82,7 +82,7 @@ const ProviderForm = () => {
             <View style={tw`flex items-end mt-3`}>
                 <Button
                     containerStyle={tw`w-5/12`}
-                    buttonStyle={[{backgroundColor: '#118ea6'}]}
+                    buttonStyle={[{backgroundColor: '#ee8920'}]}
                     titleStyle={tw`ml-3`}
                     icon={<Icon name="plus-square" type='font-awesome' size={15} color="#fff" />}
                     title="Agregar"

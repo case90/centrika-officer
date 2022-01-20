@@ -36,7 +36,7 @@ const CreateInvitationScreen = ({ route, navigation }) => {
 
         return unsubscribe;
             
-    }, [route.params?.timestamp, navigation])
+    }, [route.params, navigation])
 
     const renderEntryTypeContent = () => {
         switch(state.incoming_type_id){
@@ -65,7 +65,7 @@ const CreateInvitationScreen = ({ route, navigation }) => {
                     />
                     <Text style={tw`text-black mb-3 text-base font-thin`}>Buscar placas de carro</Text>
                     <Input
-                        rightIcon={<Icon type='font-awesome' name='search' size={25} color='#118ea6' />}
+                        rightIcon={<Icon type='font-awesome' name='search' size={25} color='#ee8920' />}
                         inputStyle={tw`ml-3 text-sm`}
                         inputContainerStyle={tw`border pl-2 pr-2 rounded-md`}
                         containerStyle={tw`flex-1 p-0`}
@@ -80,7 +80,7 @@ const CreateInvitationScreen = ({ route, navigation }) => {
                     />
                     <Text style={tw`text-black mb-3 text-base font-thin`}>Número</Text>
                     <Input
-                        rightIcon={<Icon type='font-awesome' name='search' size={25} color='#118ea6' />}
+                        rightIcon={<Icon type='font-awesome' name='search' size={25} color='#ee8920' />}
                         inputStyle={tw`ml-3 text-sm`}
                         inputContainerStyle={tw`border pl-2 pr-2 rounded-md`}
                         containerStyle={tw`flex-1 p-0`}
@@ -94,7 +94,7 @@ const CreateInvitationScreen = ({ route, navigation }) => {
                             containerStyle={tw`w-1/3`}
                             buttonStyle={state.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
                             titleStyle={state.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="user" type='font-awesome' size={15} color={state.incoming_type_id === INVITED_ENTRY_TYPE ? "#ffffff" : "#118ea6"} />}
+                            icon={<Icon name="user" type='font-awesome' size={15} color={state.incoming_type_id === INVITED_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Invitado"
                             onPress={() => handleEntryTypeContentRender(INVITED_ENTRY_TYPE)}
                         />
@@ -102,7 +102,7 @@ const CreateInvitationScreen = ({ route, navigation }) => {
                             containerStyle={tw`w-1/3`}
                             buttonStyle={state.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
                             titleStyle={state.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="truck" type='font-awesome' size={15} color={state.incoming_type_id === SERVICE_ENTRY_TYPE ? "#ffffff" : "#118ea6"} />}
+                            icon={<Icon name="truck" type='font-awesome' size={15} color={state.incoming_type_id === SERVICE_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Servicio"
                             onPress={() => handleEntryTypeContentRender(SERVICE_ENTRY_TYPE)}
                         />
@@ -110,7 +110,7 @@ const CreateInvitationScreen = ({ route, navigation }) => {
                             containerStyle={tw`w-1/3`}
                             buttonStyle={state.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
                             titleStyle={state.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="car" type='font-awesome' size={15} color={state.incoming_type_id === PROVIDER_ENTRY_TYPE ? "#ffffff" : "#118ea6"} />}
+                            icon={<Icon name="car" type='font-awesome' size={15} color={state.incoming_type_id === PROVIDER_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Proveedor"
                             onPress={() => handleEntryTypeContentRender(PROVIDER_ENTRY_TYPE)}
                         />
@@ -127,7 +127,7 @@ const CreateInvitationScreen = ({ route, navigation }) => {
                         />
                         <Button
                             containerStyle={tw`w-5/12`}
-                            buttonStyle={[{backgroundColor: '#118ea6'}]}
+                            buttonStyle={[{backgroundColor: '#ee8920'}]}
                             title="Generar QR"
                             onPress={() => store(state)}
                         />
@@ -150,21 +150,21 @@ const CreateInvitationScreen = ({ route, navigation }) => {
                     </Text>
                     <Button
                         containerStyle={{width: 120}}
-                        buttonStyle={[{backgroundColor: '#118ea6'}]}
+                        buttonStyle={[{backgroundColor: '#ee8920'}]}
                         title="Actualizar"
                         onPress={() => !route.params?.data ? initDefaultState() : loadInvitation(route.params?.data)}
                     />
                 </View>
         :
-            <ActivityIndicator size="large" color="#118EA6" style={tw`mt-5`} />
+            <ActivityIndicator size="large" color="#ee8920" style={tw`mt-5`} />
     )
 }
 
 const styles = StyleSheet.create({
     primaryButton: {
         borderWidth: 1,
-        borderColor: '#118ea6',
-        backgroundColor: '#118ea6'
+        borderColor: '#ee8920',
+        backgroundColor: '#ee8920'
     },
     primaryTitleButton: {
         paddingLeft: 5, 
@@ -173,12 +173,12 @@ const styles = StyleSheet.create({
     secondaryButton: {
         backgroundColor: '#fff', 
         borderWidth: 1, 
-        borderColor: '#118ea6'
+        borderColor: '#ee8920'
     },
     secondaryTitleButton: {
         paddingLeft: 5, 
         fontSize: 14, 
-        color: '#118ea6'
+        color: '#ee8920'
     }
 });
 

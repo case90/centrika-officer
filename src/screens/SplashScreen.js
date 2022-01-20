@@ -8,7 +8,7 @@ const SplashScreen = () => {
     return (
         <View style={tw`flex-1 bg-white items-center justify-center`}>    
             <Logo size='md' style={tw`pt-8 mb-8`} />
-            <ActivityIndicator size="large" color="#118EA6" />
+            <ActivityIndicator size="large" color="#ee8920" />
         </View>
     )
 }

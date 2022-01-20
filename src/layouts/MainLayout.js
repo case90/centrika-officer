@@ -42,7 +42,7 @@ const MainLayout = () => {
                         initialRouteName="Inicio" 
                         screenOptions={{
                             headerStyle: {
-                                backgroundColor: '#118ea6'
+                                backgroundColor: '#ee8920'
                             },
                             headerTitleStyle: {
                                 color: "#fff"
