@@ -7,7 +7,7 @@ import { Context as AuthContext} from './../context/AuthContext';
 import { Provider as EntranceProvider } from './../context/EntranceContext'
 import { navigationRef } from './../helpers/rootNavigation'
 import HomeScreen from './../screens/HomeScreen'
-import CreateInvitationScreen from './../screens/CreateInvitationScreen'
+import EntranceCreateFormScreen from './../screens/EntranceCreateFormScreen'
 
 const Drawer = createDrawerNavigator();
 
@@ -22,8 +22,8 @@ const MainLayout = () => {
                     onPress={() => props.navigation.navigate('Inicio')}
                 />
                 <DrawerItem
-                    label="Nueva invitación"
-                    onPress={() => props.navigation.navigate('CreateInvitation')}
+                    label="Crear entrada"
+                    onPress={() => props.navigation.navigate('EntranceCreateForm')}
                 />
                 <DrawerItem
                     label="Salir"
@@ -59,10 +59,10 @@ const MainLayout = () => {
                             }}
                         />
                         <Drawer.Screen 
-                            name="CreateInvitation" 
-                            component={CreateInvitationScreen} 
+                            name="EntranceCreateForm" 
+                            component={EntranceCreateFormScreen} 
                             options={{
-                                title: 'Crear invitación',
+                                title: 'Crear entrada',
                             }}
                         />
                     </Drawer.Navigator>

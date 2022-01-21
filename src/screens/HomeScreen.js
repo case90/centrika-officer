@@ -19,7 +19,7 @@ const HomeScreen = () => {
             <View style={tw`mb-5 p-8`}>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('CreateInvitation')} >
+                    onPress={() => navigation.navigate('EntranceCreateForm')} >
                         <MainMenuOption icon="user" title="Nueva invitación"/>
                 </TouchableOpacity>
                 <TouchableOpacity

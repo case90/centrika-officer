@@ -10,7 +10,7 @@ import ColorList from './../components/ColorList';
 import { INVITED_ENTRY_TYPE, SERVICE_ENTRY_TYPE, PROVIDER_ENTRY_TYPE } from './../config/defines';
 import tw from 'tailwind-react-native-classnames';
 
-const CreateInvitationScreen = ({ route, navigation }) => {
+const EntranceCreateFormScreen = ({ route, navigation }) => {
     const { 
         state, 
         store,
@@ -182,4 +182,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CreateInvitationScreen
+export default EntranceCreateFormScreen
