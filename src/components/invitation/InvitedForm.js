@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import { View, Text } from 'react-native'
-import { Context as InvitationFormContext} from './../../context/InvitationFormContext';
+import { Context as EntranceContext} from './../../context/EntranceContext';
 import { Input, Icon, Button } from 'react-native-elements'
 import ColorList from './../ColorList';
 import useHandleOnChangeTextInput from './../../hooks/useHandleOnChangeTextInput';
@@ -10,7 +10,7 @@ import EntryList from '../EntryList';
 import tw from 'tailwind-react-native-classnames';
 
 const InvitedForm = () => {
-    const { state, handleAddEntry, handleDeleteEntryItem } = useContext(InvitationFormContext);
+    const { state, handleAddEntry, handleDeleteEntryItem } = useContext(EntranceContext);
     const [inputState, handleInputChange, clearFields] = useHandleOnChangeTextInput(VisitorSchema);
 
     useEffect(() => {

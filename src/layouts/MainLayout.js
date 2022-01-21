@@ -4,7 +4,7 @@ import tw from 'tailwind-react-native-classnames';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem, } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { Context as AuthContext} from './../context/AuthContext';
-import { Provider as InvitationFormProvider } from './../context/InvitationFormContext'
+import { Provider as EntranceProvider } from './../context/EntranceContext'
 import { navigationRef } from './../helpers/rootNavigation'
 import HomeScreen from './../screens/HomeScreen'
 import CreateInvitationScreen from './../screens/CreateInvitationScreen'
@@ -34,7 +34,7 @@ const MainLayout = () => {
     }
 
     return (
-        <InvitationFormProvider>
+        <EntranceProvider>
             <SafeAreaView style={tw`flex-1 bg-blue-300`}>
                 <NavigationContainer ref={navigationRef} >
                     <Drawer.Navigator 
@@ -68,7 +68,7 @@ const MainLayout = () => {
                     </Drawer.Navigator>
                 </NavigationContainer>
             </SafeAreaView>
-        </InvitationFormProvider>
+        </EntranceProvider>
     )
 }
 

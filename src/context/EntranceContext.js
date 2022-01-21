@@ -19,7 +19,7 @@ const initialState = {
     user: null
 }
 
-const invitationFormReducer = (state = initialState, action) => {
+const entranceReducer = (state = initialState, action) => {
 
     switch(action.type){
         case 'CLEAR_STATE':
@@ -304,7 +304,7 @@ const validateSupplierData = (data) => {
 }
 
 export const { Context, Provider } = createDataContext(
-    invitationFormReducer, 
+    entranceReducer, 
     { 
         initDefaultState, 
         store, 

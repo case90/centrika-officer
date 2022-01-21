@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements';
-import { Context as InvitationFormContext} from './../context/InvitationFormContext';
+import { Context as EntranceContext} from './../context/EntranceContext';
 import InvitedForm from './../components/invitation/InvitedForm';
 import ProviderForm from './../components/invitation/ProviderForm';
 import ServiceForm from './../components/invitation/ServiceForm';
@@ -19,7 +19,7 @@ const CreateInvitationScreen = ({ route, navigation }) => {
         initDefaultState,
         handleSelectedDates,
         handleEntryTypeContentRender 
-    } = useContext(InvitationFormContext);
+    } = useContext(EntranceContext);
 
     useEffect(() => {
         if(route.params?.data){
