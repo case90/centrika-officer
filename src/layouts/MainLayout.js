@@ -5,9 +5,11 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerI
 import { NavigationContainer } from '@react-navigation/native';
 import { Context as AuthContext} from './../context/AuthContext';
 import { Provider as EntranceProvider } from './../context/EntranceContext'
+import { Provider as InvitationProvider } from './../context/InvitationContext'
 import { navigationRef } from './../helpers/rootNavigation'
 import HomeScreen from './../screens/HomeScreen'
 import EntranceCreateFormScreen from './../screens/EntranceCreateFormScreen'
+import ScannerScreen from './../screens/ScannerScreen'
 
 const Drawer = createDrawerNavigator();
 
@@ -35,39 +37,48 @@ const MainLayout = () => {
 
     return (
         <EntranceProvider>
-            <SafeAreaView style={tw`flex-1 bg-blue-300`}>
-                <NavigationContainer ref={navigationRef} >
-                    <Drawer.Navigator 
-                        initialRouteName="Inicio" 
-                        screenOptions={{
-                            headerStyle: {
-                                backgroundColor: '#ee8920'
-                            },
-                            headerTitleStyle: {
-                                color: "#fff"
-                            },
-                            headerTintColor: '#fff'
-                            
-                        }}
-                        drawerContent={(props) => <CustomDrawerContent {...props} />}
-                    >
-                        <Drawer.Screen 
-                            name="Inicio" 
-                            component={HomeScreen} 
-                            options={{
-                                title: 'Inicio',
+            <InvitationProvider>
+                <SafeAreaView style={tw`flex-1 bg-blue-300`}>
+                    <NavigationContainer ref={navigationRef} >
+                        <Drawer.Navigator 
+                            initialRouteName="Inicio" 
+                            screenOptions={{
+                                headerStyle: {
+                                    backgroundColor: '#ee8920'
+                                },
+                                headerTitleStyle: {
+                                    color: "#fff"
+                                },
+                                headerTintColor: '#fff'
+                                
                             }}
-                        />
-                        <Drawer.Screen 
-                            name="EntranceCreateForm" 
-                            component={EntranceCreateFormScreen} 
-                            options={{
-                                title: 'Crear entrada',
-                            }}
-                        />
-                    </Drawer.Navigator>
-                </NavigationContainer>
-            </SafeAreaView>
+                            drawerContent={(props) => <CustomDrawerContent {...props} />}
+                        >
+                            <Drawer.Screen 
+                                name="Inicio" 
+                                component={HomeScreen} 
+                                options={{
+                                    title: 'Inicio',
+                                }}
+                            />
+                            <Drawer.Screen 
+                                name="EntranceCreateForm" 
+                                component={EntranceCreateFormScreen} 
+                                options={{
+                                    title: 'Crear entrada',
+                                }}
+                            />
+                            <Drawer.Screen 
+                                name="Scanner" 
+                                component={ScannerScreen} 
+                                options={{
+                                    title: 'Escaner',
+                                }}
+                            />
+                        </Drawer.Navigator>
+                    </NavigationContainer>
+                </SafeAreaView>
+            </InvitationProvider>
         </EntranceProvider>
     )
 }
