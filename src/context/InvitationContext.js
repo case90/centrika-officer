@@ -8,9 +8,10 @@ import moment from 'moment';
 
 const initialState = {
     error: false,
-    message: "",
+    message: '',
     fetchingData: false,
-    data: [],
+    scannerVisibilityState: true,
+    data: null,
 }
 
 const invitationReducer = (state = initialState, action) => {
@@ -24,6 +25,8 @@ const invitationReducer = (state = initialState, action) => {
             }
         case 'FETCHING_DATA':
             return { ...state, fetchingData: action.payload.fetchingData }  
+        case 'SET_SCANNER_VISIBILITY_STATE':
+            return { ...state, scannerVisibilityState: action.payload.scannerVisibilityState }  
         case 'SET_REQUEST_ERROR':
             return { 
                 ...state, 
@@ -31,6 +34,14 @@ const invitationReducer = (state = initialState, action) => {
                 message: action.payload.message,
                 fetchingData: false
             }
+        case 'SET_INVITATION_DATA':
+            return { 
+                ...state, 
+                data: action.payload.data,
+                fetchingData: false,
+                error: false,
+                scannerVisibilityState: false,
+                message: '' }
         default:
             return state
     }
@@ -43,15 +54,35 @@ const clearState = (dispatch) => {
     }
 }
 
+const validateQrCode = (code) => {
+    const scanned_code = parseInt(code);
+    if(Number.isInteger(scanned_code))
+        return true
+
+    return false
+}
+
 const fetchInvitationById = (dispatch) => {
     return async (id) => {
         try {
-            dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
-            const user = JSON.parse(await AsyncStorage.getItem('user'));
-            const token = user.token
-            const data = await httpClient.get(`invitations/${id}`, {'Authorization': token});
-            console.log('fetchInvitationById ', data)
-          
+            if(validateQrCode(id)){
+                dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+                const user = JSON.parse(await AsyncStorage.getItem('user'));
+                const token = user.token
+                const data = await httpClient.get(`invitations/${id}`, {'Authorization': token});
+                console.log(data)
+                dispatch({ 
+                    type: 'SET_INVITATION_DATA', 
+                    payload: { data } 
+                });
+            }else{
+                dispatch({ 
+                    type: 'SET_REQUEST_ERROR',
+                    payload: { 
+                        error: true, 
+                        message: 'El código QR escaneado no es un codigo valido.' }
+                });
+            }
         } catch (error) {
             dispatch({ 
                 type: 'SET_REQUEST_ERROR', 
@@ -66,12 +97,30 @@ const fetchInvitationById = (dispatch) => {
     }
 }
 
+const setScannerVisibilityState = (dispatch) => {
+    return async (state) => {
+        dispatch({ 
+            type: 'SET_SCANNER_VISIBILITY_STATE', 
+            payload: { 
+                scannerVisibilityState: state 
+            } 
+        });
+    }
+}
+
+const laodInvitationByGuestId = (dispatch) => {
+    return async (id) => {
+        console.log('Load invitation ', id)
+    }
+}
 
 export const { Context, Provider } = createDataContext(
     invitationReducer, 
     { 
         clearState,
         fetchInvitationById, 
+        laodInvitationByGuestId,
+        setScannerVisibilityState,
     },
     initialState
 );
