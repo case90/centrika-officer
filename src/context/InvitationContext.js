@@ -20,8 +20,6 @@ const invitationReducer = (state = initialState, action) => {
         case 'CLEAR_STATE':
             return { 
                 ...initialState,
-                car_colors: state.car_colors,
-                streets: state.streets,
             }
         case 'FETCHING_DATA':
             return { ...state, fetchingData: action.payload.fetchingData }  
@@ -70,7 +68,6 @@ const fetchInvitationById = (dispatch) => {
                 const user = JSON.parse(await AsyncStorage.getItem('user'));
                 const token = user.token
                 const data = await httpClient.get(`invitations/${id}`, {'Authorization': token});
-                console.log(data)
                 dispatch({ 
                     type: 'SET_INVITATION_DATA', 
                     payload: { data } 
@@ -109,9 +106,23 @@ const setScannerVisibilityState = (dispatch) => {
 }
 
 const laodInvitationByGuestId = (dispatch) => {
-    return async (id) => {
-        console.log('Load invitation ', id)
+    return async (id, currentState) => {
+        dispatch({ type: 
+            'FETCHING_DATA', 
+            payload: { 
+                fetchingData: true 
+            } 
+        });
+        const data = { ...currentState, data: filterGuestById(id, currentState.data) }
+        const currentDate = new Date();
+        const timestamp = currentDate.getTime();
+        rootNavigation.navigate('EntranceCreateForm', { data, timestamp })
+        dispatch({type: 'CLEAR_STATE' });
     }
+}
+
+const filterGuestById = (id, guests) => {
+    return guests.filter(guest => guest.id == id);
 }
 
 export const { Context, Provider } = createDataContext(

@@ -1,18 +1,28 @@
-import React, { useContext } from 'react'
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native'
+import React, { useContext, useEffect } from 'react'
+import { ScrollView, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 import Scanner from './../components/Scanner';
 import { Context as InvitationContext} from './../context/InvitationContext';
 import tw from 'tailwind-react-native-classnames';
+import { useNavigation } from '@react-navigation/native';
 import { Button, Icon } from 'react-native-elements'
 
 const ScannerScreen = () => {
 
+    const navigation = useNavigation();
     const { 
         state, 
+        clearState,
         fetchInvitationById, 
         laodInvitationByGuestId,
         setScannerVisibilityState 
     } = useContext(InvitationContext);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
+            clearState()
+        });
+        return unsubscribe;
+    }, [])
 
     const renderScanner = () => {
         return (
@@ -42,7 +52,7 @@ const ScannerScreen = () => {
                             return (
                                 <TouchableOpacity 
                                     style={tw`flex-1 mb-3 p-3 border shadow-sm border-gray-300 rounded-lg`} key={item.id}
-                                    onPress={() => laodInvitationByGuestId(item.id)}
+                                    onPress={() => laodInvitationByGuestId(item.id, state.data)}
                                 >
                                     <Text style={tw`font-bold`}>{item.name}</Text>
                                     <View style={tw`flex-row`} key={item.id}>
@@ -72,12 +82,17 @@ const ScannerScreen = () => {
     }
 
     const renderInvitationDetail = () => {
+        console.log(state.fetchingData )
         return (
             <View style={tw`flex-1 p-3`}>
                 {
                     state.data 
                     ?
-                    getDetailContent()
+                        !state.fetchingData 
+                        ?
+                        getDetailContent()
+                        :
+                        <ActivityIndicator size="large" color="#ee8920" style={tw`mt-5`} />
                     :
                     <Text style={tw`text-lg	text-center mb-3`}>No hay datos, porfavor escanear un código QR valido.</Text>
                 }
