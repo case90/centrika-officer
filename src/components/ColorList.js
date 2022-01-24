@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements'
 import tw from 'tailwind-react-native-classnames';
 
-const ColorList = ({ data, value, getSelectedColor }) => {
+const ColorList = ({ data, value, onPress }) => {
 
     return (
         <View style={tw`flex-row flex-wrap`}>
@@ -13,7 +13,7 @@ const ColorList = ({ data, value, getSelectedColor }) => {
                         <TouchableOpacity 
                             key={item.id} 
                             style={tw`mb-3 w-1/4 items-center`}
-                            onPress={() => getSelectedColor(item.id)}>
+                            onPress={() => onPress(item.id)}>
                             <View 
                                 style={[ { borderColor:item.background_color }, value === item.id ? styles.activeItem : styles.itemStyle ]}>
                                 <Icon type='font-awesome' name={item.icon} size={25} color={value === item.id ? '#fff' : item.background_color} />

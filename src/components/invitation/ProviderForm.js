@@ -77,7 +77,7 @@ const ProviderForm = () => {
             <ColorList 
                 data={state.car_colors}
                 value={inputState.car_color_id}
-                getSelectedColor={(color) =>  handleInputChange(color, 'car_color_id')}
+                onPress={(color) =>  handleInputChange(color, 'car_color_id')}
             />
             <View style={tw`flex items-end mt-3`}>
                 <Button
