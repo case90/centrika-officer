@@ -14,6 +14,7 @@ const initialState = {
     final_date: "",
     car_colors: [],
     streets: [],
+    street_id: null,
     incoming_type_id: INVITED_ENTRY_TYPE,
     data: [],
     user: null
@@ -43,6 +44,8 @@ const entranceReducer = (state = initialState, action) => {
             return { ...state, initial_date: action.payload.initial_date }
         case 'SET_FINAL_DATE':
             return { ...state, final_date: action.payload.final_date }
+        case 'SET_STREET_ID':
+            return { ...state, street_id: action.payload.street_id }
         case 'SET_FORM_INITIAL_DATA':
             return { 
                 ...state,
@@ -261,6 +264,12 @@ const handleSelectedDates = (dispatch) => {
     }
 }
 
+const handleSelectedStreet = (dispatch) => {
+    return async (street_id) => {
+        dispatch({ type: 'SET_STREET_ID', payload: { street_id } });
+    }
+}
+
 const validateInvitationData = (data) => {
     let result = { error: false }
     if(!data.initial_date || !data.final_date)
@@ -312,6 +321,7 @@ export const { Context, Provider } = createDataContext(
         loadInvitation,
         handleAddEntry, 
         handleSelectedDates,
+        handleSelectedStreet,
         handleEntryTypeContentRender,
         handleDeleteEntryItem,
     },

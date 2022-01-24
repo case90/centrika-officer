@@ -5,8 +5,7 @@ import { Context as EntranceContext} from './../context/EntranceContext';
 import InvitedForm from './../components/invitation/InvitedForm';
 import ProviderForm from './../components/invitation/ProviderForm';
 import ServiceForm from './../components/invitation/ServiceForm';
-import DateRange from './../components/DateRange';
-import ColorList from './../components/ColorList';
+import StreetList from './../components/StreetList';
 import { INVITED_ENTRY_TYPE, SERVICE_ENTRY_TYPE, PROVIDER_ENTRY_TYPE } from './../config/defines';
 import tw from 'tailwind-react-native-classnames';
 
@@ -17,7 +16,7 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
         clearState,
         loadInvitation,
         initDefaultState,
-        handleSelectedDates,
+        handleSelectedStreet,
         handleEntryTypeContentRender 
     } = useContext(EntranceContext);
 
@@ -74,9 +73,10 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                         value="RMK123"
                     />
                     <Text style={tw`text-black mb-3 text-base font-thin`}>Calle</Text>
-                    <ColorList
+                    <StreetList
                         data={state.streets}
-                        getSelectedColor={(item) => console.log(item)}
+                        value={state.street_id}
+                        onPress={(item) => handleSelectedStreet(item)}
                     />
                     <Text style={tw`text-black mb-3 text-base font-thin`}>Número</Text>
                     <Input
