@@ -28,8 +28,11 @@ const initialState = {
     incoming_time: null,
     incoming_type_id: INVITED_ENTRY_TYPE,
     data: [],
-    employees: [],
-    employee_quantity: null,
+    employees: [
+        {"name": "Cristian", "surname": "Mendoza"},
+		{"name": "Abraham", "surname": "Sosa"}
+    ],
+    employee_quantity: 2,
     user: null
 }
 

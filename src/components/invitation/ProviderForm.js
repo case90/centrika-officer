@@ -6,7 +6,7 @@ import ColorList from './../ColorList';
 import useHandleOnChangeTextInput from './../../hooks/useHandleOnChangeTextInput';
 import { ProviderSchema } from './../../config/schemas';
 import { PROVIDER_ENTRY_TYPE } from './../../config/defines';
-import EntryList from '../EntryList';
+import EntryListProvider from '../EntryListProvider';
 import tw from 'tailwind-react-native-classnames';
 
 const ProviderForm = () => {
@@ -89,8 +89,10 @@ const ProviderForm = () => {
                     onPress={() => handleAddEntry(inputState, PROVIDER_ENTRY_TYPE)}
                 />
             </View>
-            <EntryList 
+            <EntryListProvider 
                 data={state.data}
+                employeeQty={2}
+                employees={state.employees}
                 deleteItem={(id) => handleDeleteEntryItem(id)} />
         </>
     )
