@@ -82,7 +82,6 @@ const ScannerScreen = () => {
     }
 
     const renderInvitationDetail = () => {
-        console.log(state.fetchingData )
         return (
             <View style={tw`flex-1 p-3`}>
                 {
