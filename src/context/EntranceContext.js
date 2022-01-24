@@ -15,8 +15,21 @@ const initialState = {
     car_colors: [],
     streets: [],
     street_id: null,
+    car_tag: "",
+    name: "",
+    number: "",
+    neighbor: "",
+    car_model: "",
+    reason_id: 1,
+    car_color_id: null,
+    equip_description: "",
+    company: "",
+    reason: "",
+    incoming_time: null,
     incoming_type_id: INVITED_ENTRY_TYPE,
     data: [],
+    employees: [],
+    employee_quantity: null,
     user: null
 }
 
@@ -72,6 +85,10 @@ const entranceReducer = (state = initialState, action) => {
         case 'LOAD_INVITATION_DATA':
             return { 
                 ...state,
+                ...action.payload.data[0],
+                number: action.payload.address.number,
+                neighbor: action.payload.address.neighbor.name,
+                street_id: action.payload.address.street.id,
                 incoming_type_id:  parseInt(action.payload.incoming_type_id),
                 data: action.payload.data,
                 fetchingData: false
