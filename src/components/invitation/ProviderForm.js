@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import { View, Text } from 'react-native'
-import { Context as EntranceContext} from './../../context/EntranceContext';
+import { Context as IncomeTypeContext} from './../../context/IncomeTypeContext';
 import { Input, Icon, Button } from 'react-native-elements'
 import ColorList from './../ColorList';
 import useHandleOnChangeTextInput from './../../hooks/useHandleOnChangeTextInput';
@@ -9,8 +9,8 @@ import { PROVIDER_ENTRY_TYPE } from './../../config/defines';
 import EntryListProvider from '../EntryListProvider';
 import tw from 'tailwind-react-native-classnames';
 
-const ProviderForm = () => {
-    const { state, handleAddEntry, handleDeleteEntryItem } = useContext(EntranceContext);
+const ProviderForm = ({ carColors }) => {
+    const { state, handleAddEntry, handleDeleteEntryItem } = useContext(IncomeTypeContext);
     const [inputState, handleInputChange, clearFields] = useHandleOnChangeTextInput(ProviderSchema);
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const ProviderForm = () => {
                 onChangeText={(value) => handleInputChange(value, 'car_model')}
             />
             <ColorList 
-                data={state.car_colors}
+                data={carColors}
                 value={inputState.car_color_id}
                 onPress={(color) =>  handleInputChange(color, 'car_color_id')}
             />

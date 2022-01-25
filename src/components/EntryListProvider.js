@@ -1,78 +1,23 @@
-import React, { useEffect, useReducer } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import React, { useEffect, useContext } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Context as IncomeTypeContext} from './../context/IncomeTypeContext';
 import { Icon, Input, Button } from 'react-native-elements';
 import tw from 'tailwind-react-native-classnames';
 import IntegerInput from './IntegerInput';
 
-const initialState = { 
-    employeeQty: 0,
-    employees: []
-};
-
-const entryProviderReducer = (state = initialState, action) => {
-    switch(action.type){
-        case 'CLEAR_STATE':
-            return initialState
-        case 'SET_INITIAL_DATA':
-            return { 
-                ...state, 
-                employees: populateEmployeeArray(action.payload.employeeQty),
-                employeeQty: action.payload.employeeQty,
-            }
-        case 'DELETE_ALL_EMPLOYEES':
-            return { 
-                ...state, 
-                employees: [],
-                employeeQty: 0,
-            }
-        case 'DELETE_EMPLOYEE':
-            const filteredEmployees = state.employees.filter((item) => item.id != action.payload.id)
-            return { 
-                ...state,
-                employeeQty: filteredEmployees.length,
-                employees: filteredEmployees
-            }
-        case 'SET_EMPLOYEE_QTY':
-            const employeeQty = calculateEmployeeQty(action.payload.type, state.employeeQty, action.payload.qty)
-            const employees = populateEmployeeArray(employeeQty)
-            return { 
-                ...state, 
-                employees,
-                employeeQty
-            }
-        default:
-            return state
-    }
-}
-
-const populateEmployeeArray = (amount) => {
-    let employees = [];
-    for(let i = 0; i < amount; i++){
-        employees = [ ...employees, { id: `${i}`, name: '', surname: '' } ]
-    }
-    return employees
-}
-
-const calculateEmployeeQty = (type, currentQty, qty) => {
-    const localQty = type === 'increase' 
-        ? 
-        parseInt(currentQty) + parseInt(qty) 
-        :
-        parseInt(currentQty) - parseInt(qty);
-
-    return localQty > 0 ? localQty : '0'
-}
-
 const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
 
-    const [state, dispatch] = useReducer(entryProviderReducer, initialState);
+    const { 
+        state,
+        handleDeleteEmployee,
+        handleDeleteAllEmployees,
+        handleSetEmployeeQuantity, 
+        handleGenerateEmployeesObjectByQty 
+    } = useContext(IncomeTypeContext);
 
     useEffect(() => {
         if(employeeQty){
-            dispatch({ 
-                type: 'SET_INITIAL_DATA', 
-                payload: { employeeQty } 
-            })
+            handleGenerateEmployeesObjectByQty(employeeQty)
         }
     }, [employeeQty])
 
@@ -110,11 +55,7 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
                                 <Text style={tw`text-black mb-3 text-base font-thin`}>Cantidad de empleados</Text>
                                 <IntegerInput 
                                     value={`${state.employeeQty}`} 
-                                    onPress={(type, qty) => dispatch({ 
-                                            type: 'SET_EMPLOYEE_QTY', 
-                                            payload: { type, qty } 
-                                        })
-                                    }
+                                    onPress={(type, qty) => handleSetEmployeeQuantity(type, qty)}
                                 />
                                 {
                                     state.employeeQty > 0
@@ -122,15 +63,9 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
                                     <View style={tw`flex-row justify-between`}>
                                         <Button
                                             title={'Eliminar todos'}
-                                            containerStyle={tw`w-5/12 mb-5`}
+                                            containerStyle={tw`flex-1 mb-5`}
                                             buttonStyle={{ backgroundColor: 'gray' }}
-                                            onPress={() => dispatch({ type: 'DELETE_ALL_EMPLOYEES' })}
-                                        />
-                                        <Button
-                                            title={'Guardar'}
-                                            containerStyle={tw`w-5/12 mb-5`}
-                                            buttonStyle={{ backgroundColor: '#ee8920' }}
-                                            onPress={() => dispatch({ type: 'DELETE_ALL_EMPLOYEES' })}
+                                            onPress={() => handleDeleteAllEmployees()}
                                         />
                                     </View>
                                     :
@@ -165,16 +100,11 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
                                         value={employee.surname}
                                     />
                                 </View>
-                        
                                 <Button
                                     title={'Eliminar empleado'}
                                     containerStyle={tw`flex-1 mb-5`}
                                     buttonStyle={{ backgroundColor: '#ee8920' }}
-                                    onPress={() =>  dispatch({ 
-                                            type: 'DELETE_EMPLOYEE', 
-                                            payload: { id: employee.id } 
-                                        })
-                                    }
+                                    onPress={() =>  handleDeleteEmployee(employee.id) }
                                 />
                             </View>
                         )

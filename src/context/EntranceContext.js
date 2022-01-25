@@ -2,7 +2,6 @@ import { Alert } from 'react-native'
 import createDataContext from './createDataContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import httpClient from '../services/httpClient'
-import { INVITED_ENTRY_TYPE, PROVIDER_ENTRY_TYPE } from '../config/defines';
 import * as rootNavigation from '../helpers/rootNavigation';
 import moment from 'moment';
 
@@ -26,10 +25,7 @@ const initialState = {
     company: "",
     reason: "",
     incoming_time: null,
-    incoming_type_id: INVITED_ENTRY_TYPE,
     data: [],
-    employees: [],
-    employee_quantity: 0,
     user: null
 }
 
@@ -44,15 +40,6 @@ const entranceReducer = (state = initialState, action) => {
             }
         case 'FETCHING_DATA':
             return { ...state, fetchingData: action.payload.fetchingData }
-        case 'RENDER_ENTRY_TYPE_CONTENT':
-            return { 
-                ...state, 
-                incoming_type_id: action.payload.incoming_type_id,
-                data: []
-            }     
-        case 'DELETE_ENTRY_TYPE_ITEM':
-            let data = state.data.filter((item) => item.id !== action.payload.id);
-            return { ...state, data }
         case 'SET_INITIAL_DATE':
             return { ...state, initial_date: action.payload.initial_date }
         case 'SET_FINAL_DATE':
@@ -68,15 +55,6 @@ const entranceReducer = (state = initialState, action) => {
                 fetchingData: false,
                 error: false,
                 message: ""
-            }
-        case 'ADD_ENTRY_DATA_ITEM':
-            let newData = [action.payload.data];
-            if(action.payload.incoming_type_id === INVITED_ENTRY_TYPE)
-                newData = [...state.data, action.payload.data];
-            return { 
-                ...state, 
-                employee_quantity: action.payload.data.employee_quantity, 
-                data: newData 
             }
         case 'SET_REQUEST_ERROR':
             return { 
@@ -214,66 +192,6 @@ const store = (dispatch) => {
     }
 }
 
-const handleEntryTypeContentRender = (dispatch, state) => {
-    return async (incoming_type_id) => {
-        if(state.data.length === 0){
-            dispatch({
-                type: 'RENDER_ENTRY_TYPE_CONTENT', 
-                payload: { incoming_type_id } 
-            });
-        }else{
-            Alert.alert(
-                "Borrar registro",
-                'Ya cuenta con un tipo de entrada registrado para esta invitacion, ¿Desea borrarlo?',
-                [
-                    {
-                        text: "Cancelar"
-                    },
-                    {
-                        text: "Ok",
-                        onPress: () => dispatch({ type: 'RENDER_ENTRY_TYPE_CONTENT', payload: { incoming_type_id } }),
-                    }
-                ]
-            )
-        }
-        
-    }
-}
-
-const handleAddEntry = (dispatch) => {
-    return async (data, type) => {
-        let validated;
-        if(type !== PROVIDER_ENTRY_TYPE )
-            validated = validateEntryData(data)
-        else
-            validated = validateSupplierData(data)
-            
-        if(!validated.error){
-            dispatch({
-                type: 'ADD_ENTRY_DATA_ITEM',
-                payload: {
-                    data: { ...data, id: new Date().getTime() }, 
-                    incoming_type_id: type, 
-                }
-            });
-        }else{
-            Alert.alert(
-                "Ha ocurrido un error",
-                validated.message,
-                [{ 
-                    text: "Aceptar"
-                }]
-            )
-        }
-    }
-}
-
-const handleDeleteEntryItem = (dispatch) => {
-    return async (id) => {
-        dispatch({ type: 'DELETE_ENTRY_TYPE_ITEM', payload: {id} });
-    }
-}
-
 const handleSelectedDates = (dispatch) => {
     return async (date, type) => {
         const formatedDate = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
@@ -300,38 +218,6 @@ const validateInvitationData = (data) => {
     return result
 }
 
-const validateEntryData = (data) => {
-    let result = { error: false }
-    if(!data.name)
-        return {...result, error: true, message: 'El nombre es requerido.'}
-    if(!data.car_model)
-        return {...result, error: true, message: 'El modelo es requerido.'}
-    if(!data.car_color_id)
-        return {...result, error: true, message: 'El color es requerido.'}
-    if(!data.car_tag)
-        return {...result, error: true, message: 'Las placas son requeridas.'}
-
-    return result
-}
-
-const validateSupplierData = (data) => {
-    let result = { error: false }
-    if(!data.name)
-        return {...result, error: true, message: 'El nombre es requerido.'}
-    if(!data.car_model)
-        return {...result, error: true, message: 'El modelo es requerido.'}
-    if(!data.car_color_id)
-        return {...result, error: true, message: 'El color es requerido.'}
-    if(!data.car_tag)
-        return {...result, error: true, message: 'Las placas son requeridas.'}
-    if(!data.reason)
-        return {...result, error: true, message: 'El equipo es requerido.'}
-    if(!data.employee_quantity)
-        return {...result, error: true, message: 'La cantidad de empleados es requerida.'}
-
-    return result
-}
-
 export const { Context, Provider } = createDataContext(
     entranceReducer, 
     { 
@@ -339,11 +225,8 @@ export const { Context, Provider } = createDataContext(
         store, 
         clearState,
         loadInvitation,
-        handleAddEntry, 
         handleSelectedDates,
         handleSelectedStreet,
-        handleEntryTypeContentRender,
-        handleDeleteEntryItem,
     },
     initialState
 );

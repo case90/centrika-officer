@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements';
 import { Context as EntranceContext} from './../context/EntranceContext';
+import { Context as IncomeTypeContext} from './../context/IncomeTypeContext';
 import InvitedForm from './../components/invitation/InvitedForm';
 import ProviderForm from './../components/invitation/ProviderForm';
 import ServiceForm from './../components/invitation/ServiceForm';
@@ -17,8 +18,8 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
         loadInvitation,
         initDefaultState,
         handleSelectedStreet,
-        handleEntryTypeContentRender 
     } = useContext(EntranceContext);
+    const incomeTypeContext = useContext(IncomeTypeContext);
 
     useEffect(() => {
         if(route.params?.data){
@@ -38,13 +39,13 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
     }, [route.params, navigation])
 
     const renderEntryTypeContent = () => {
-        switch(state.incoming_type_id){
+        switch(incomeTypeContext.state.incoming_type_id){
             case 1:
-                return <InvitedForm />
+                return <InvitedForm carColors={state.car_colors} />
             case 2:
-                return <ServiceForm />
+                return <ServiceForm carColors={state.car_colors} />
             case 3:
-                return <ProviderForm />
+                return <ProviderForm carColors={state.car_colors} />
         }
     }
 
@@ -92,27 +93,27 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                     <View style={tw`flex-row justify-between mb-4`}>
                         <Button
                             containerStyle={tw`w-1/3`}
-                            buttonStyle={state.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
-                            titleStyle={state.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="user" type='font-awesome' size={15} color={state.incoming_type_id === INVITED_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
+                            buttonStyle={incomeTypeContext.state.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
+                            titleStyle={incomeTypeContext.state.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
+                            icon={<Icon name="user" type='font-awesome' size={15} color={incomeTypeContext.state.incoming_type_id === INVITED_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Invitado"
-                            onPress={() => handleEntryTypeContentRender(INVITED_ENTRY_TYPE)}
+                            onPress={() => incomeTypeContext.handleEntryTypeContentRender(INVITED_ENTRY_TYPE)}
                         />
                         <Button
                             containerStyle={tw`w-1/3`}
-                            buttonStyle={state.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
-                            titleStyle={state.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="truck" type='font-awesome' size={15} color={state.incoming_type_id === SERVICE_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
+                            buttonStyle={incomeTypeContext.state.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
+                            titleStyle={incomeTypeContext.state.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
+                            icon={<Icon name="truck" type='font-awesome' size={15} color={incomeTypeContext.state.incoming_type_id === SERVICE_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Servicio"
-                            onPress={() => handleEntryTypeContentRender(SERVICE_ENTRY_TYPE)}
+                            onPress={() => incomeTypeContext.handleEntryTypeContentRender(SERVICE_ENTRY_TYPE)}
                         />
                         <Button
                             containerStyle={tw`w-1/3`}
-                            buttonStyle={state.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
-                            titleStyle={state.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="car" type='font-awesome' size={15} color={state.incoming_type_id === PROVIDER_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
+                            buttonStyle={incomeTypeContext.state.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
+                            titleStyle={incomeTypeContext.state.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
+                            icon={<Icon name="car" type='font-awesome' size={15} color={incomeTypeContext.state.incoming_type_id === PROVIDER_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Proveedor"
-                            onPress={() => handleEntryTypeContentRender(PROVIDER_ENTRY_TYPE)}
+                            onPress={() => incomeTypeContext.handleEntryTypeContentRender(PROVIDER_ENTRY_TYPE)}
                         />
                     </View>
                     <View style={tw`mb-8`}>
