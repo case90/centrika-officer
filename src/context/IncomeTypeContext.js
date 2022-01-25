@@ -63,6 +63,15 @@ const incomeTypeReducer = (state = initialState, action) => {
                 incoming_type_id: action.payload.incoming_type_id,
                 data: []
             }
+        case 'LOAD_ENTRY_TYPE_DATA':
+            let providerData = action.payload.data[0]
+            return { 
+                ...state, 
+                incoming_type_id:  parseInt(action.payload.incoming_type_id),
+                employee_quantity: providerData.employee_quantity,
+                employees: populateEmployeeArray(providerData.employee_quantity),
+                data: [providerData],
+            }
         case 'GENERATE_EMPLOYEES_OBJECTS_BY_QTY':
             return { 
                 ...state, 
@@ -174,6 +183,15 @@ const handleDeleteEntryItem = (dispatch) => {
     }
 }
 
+const handleLoadEntryTypeData = (dispatch) => {
+    return async (data) => {
+        dispatch({ 
+            type: 'LOAD_ENTRY_TYPE_DATA',
+            payload: {...data }
+        });
+    }
+}
+
 const handleDeleteAllEmployees = (dispatch) => {
     return async () => {
         dispatch({ type: 'DELETE_ALL_EMPLOYEES' })
@@ -231,6 +249,7 @@ export const { Context, Provider } = createDataContext(
         handleAddEntry,
         handleDeleteEmployee,
         handleDeleteEntryItem,
+        handleLoadEntryTypeData,
         handleDeleteAllEmployees,
         handleSetEmployeeQuantity,
         handleEntryTypeContentRender,

@@ -24,6 +24,7 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
     useEffect(() => {
         if(route.params?.data){
             loadInvitation(route.params?.data);
+            incomeTypeContext.handleLoadEntryTypeData(route.params?.data);
         }
 
         if(state.car_colors.length === 0 || state.streets.length === 0){

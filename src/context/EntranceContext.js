@@ -70,8 +70,6 @@ const entranceReducer = (state = initialState, action) => {
                 number: action.payload.address.number,
                 neighbor: action.payload.address.neighbor.name,
                 street_id: action.payload.address.street.id,
-                incoming_type_id:  parseInt(action.payload.incoming_type_id),
-                data: action.payload.data,
                 fetchingData: false
             }
         default:
