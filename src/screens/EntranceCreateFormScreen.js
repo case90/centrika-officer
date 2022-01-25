@@ -128,7 +128,7 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                         <Button
                             containerStyle={tw`w-5/12`}
                             buttonStyle={[{backgroundColor: '#ee8920'}]}
-                            title="Generar QR"
+                            title="Guardar Entrada"
                             onPress={() => store(state)}
                         />
                     </View>               
