@@ -29,6 +29,7 @@ const ScannerScreen = () => {
             <Scanner 
                 onScanner={(id) => fetchInvitationById(id)} 
                 onPressCloseButton={() => setScannerVisibilityState(!state.scannerVisibilityState)}
+                onPressBack={() => navigation.navigate('EntranceCreateForm')}
             />
         );
     }
@@ -93,7 +94,21 @@ const ScannerScreen = () => {
                         :
                         <ActivityIndicator size="large" color="#ee8920" style={tw`mt-5`} />
                     :
-                    <Text style={tw`text-lg	text-center mb-3`}>No hay datos, porfavor escanear un código QR valido.</Text>
+                    <View style={tw`items-center flex-1 justify-center`}>
+                        <Text style={tw`text-lg	text-center mb-3`}>No hay datos, porfavor escanear un código QR valido.</Text>
+                        <Button
+                            title="Escanerar nuevo código"
+                            icon={<Icon name="qrcode" type='font-awesome' size={20} color={"#ffffff"} />}
+                            buttonStyle={{
+                                backgroundColor: '#ee8920',
+                                borderRadius: 3,
+                            }}
+                            titleStyle={tw`ml-1 text-base p-1`}
+                            containerStyle={tw`w-8/12`}
+                            onPress={() => setScannerVisibilityState(!state.scannerVisibilityState)}
+                        />
+                    </View>
+                    
                 }
                 
             </View>

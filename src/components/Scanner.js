@@ -59,7 +59,7 @@ const qrScannerReducer = (state = initialState, action) => {
 
 }
 
-const Scanner = ({ onScanner, onPressCloseButton }) => {
+const Scanner = ({ onScanner, onPressBack, onPressCloseButton }) => {
     const isFocused = useIsFocused();
     const [state, dispatch] = useReducer(qrScannerReducer, initialState);
 
@@ -137,14 +137,23 @@ const Scanner = ({ onScanner, onPressCloseButton }) => {
                     barCodeScannerSettings={{
                         barCodeTypes: ['qr'],
                     }}>
-                        <View style={{ flex: 3, backgroundColor: opacity, alignItems: 'flex-end' }}>
-                            <TouchableOpacity
-                                style={tw`p-3 bg-white rounded-full mt-5 mr-5`}
-                                onPress={() => onPressCloseButton()}>
-                                <View style={tw`flex-row`}>
-                                    <Icon name='times-circle' type='font-awesome' color='black' />
-                                </View>
-                            </TouchableOpacity>
+                        <View style={{ flex: 3, backgroundColor: opacity, alignItems: 'flex-start', flexDirection: 'row' }}>
+                            <View style={tw`flex-1 flex-row justify-between mt-5 pl-5 pr-5`}>
+                                <TouchableOpacity
+                                    style={[tw`p-3 justify-center bg-white rounded-full`, {width: 50, height: 50}]}
+                                    onPress={onPressBack}>
+                                    
+                                        <Icon name='undo' type='font-awesome' color='black' />
+                                   
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[tw`p-3 justify-center bg-white rounded-full`, {width: 50, height: 50}]}
+                                    onPress={() => onPressCloseButton()}>
+                                   
+                                        <Icon name='times-circle' type='font-awesome' color='black' />
+                                
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         <View style={{ flex: 4, flexDirection: 'row' }}>
                             <View style={{ flex: 1, backgroundColor: opacity }} />
