@@ -42,11 +42,27 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
     const renderEntryTypeContent = () => {
         switch(incomeTypeContext.state.incoming_type_id){
             case 1:
-                return <InvitedForm carColors={state.car_colors} />
+                return (
+                    <InvitedForm 
+                        data={incomeTypeContext.state.data} 
+                        carColors={incomeTypeContext.state.car_colors} 
+                    />
+                )
             case 2:
-                return <ServiceForm carColors={state.car_colors} />
+                return (
+                    <ServiceForm 
+                        data={incomeTypeContext.state.data} 
+                        carColors={incomeTypeContext.state.car_colors} 
+                    />
+                )
             case 3:
-                return <ProviderForm carColors={state.car_colors} />
+                return(
+                    <ProviderForm 
+                        data={incomeTypeContext.state.data} 
+                        employeeQty={incomeTypeContext.state.employee_quantity} 
+                        carColors={incomeTypeContext.state.car_colors} 
+                    />
+                )
         }
     }
 

@@ -9,13 +9,13 @@ import { SERVICE_ENTRY_TYPE } from './../../config/defines';
 import EntryList from '../EntryList';
 import tw from 'tailwind-react-native-classnames';
 
-const ServiceForm = ({ carColors }) => {
-    const { state, handleAddEntry, handleDeleteEntryItem } = useContext(IncomeTypeContext);
+const ServiceForm = ({ data, carColors }) => {
+    const { handleAddEntry, handleDeleteEntryItem } = useContext(IncomeTypeContext);
     const [inputState, handleInputChange, clearFields] = useHandleOnChangeTextInput(ServiceSchema);
 
     useEffect(() => {
         clearFields()
-    }, [state.data]);
+    }, [data]);
     
     return (
         <>
@@ -68,10 +68,10 @@ const ServiceForm = ({ carColors }) => {
                 />
             </View>
             <EntryList 
-                data={state.data}
+                data={data}
                 deleteItem={(id) => handleDeleteEntryItem(id)} />
         </>
     )
 }
 
-export default ServiceForm
+export default React.memo(ServiceForm)

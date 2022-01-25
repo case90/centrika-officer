@@ -9,13 +9,13 @@ import { PROVIDER_ENTRY_TYPE } from './../../config/defines';
 import EntryListProvider from '../EntryListProvider';
 import tw from 'tailwind-react-native-classnames';
 
-const ProviderForm = ({ carColors }) => {
-    const { state, handleAddEntry, handleDeleteEntryItem } = useContext(IncomeTypeContext);
+const ProviderForm = ({ data, employeeQty, carColors }) => {
+    const { handleAddEntry, handleDeleteEntryItem } = useContext(IncomeTypeContext);
     const [inputState, handleInputChange, clearFields] = useHandleOnChangeTextInput(ProviderSchema);
 
     useEffect(() => {
         clearFields()
-    }, [state.data]);
+    }, [data]);
     
     return (
         <>
@@ -90,11 +90,11 @@ const ProviderForm = ({ carColors }) => {
                 />
             </View>
             <EntryListProvider 
-                data={state.data}
-                employeeQty={state.employee_quantity}
+                data={data}
+                employeeQty={employeeQty}
                 deleteItem={(id) => handleDeleteEntryItem(id)} />
         </>
     )
 }
 
-export default ProviderForm
+export default React.memo(ProviderForm)

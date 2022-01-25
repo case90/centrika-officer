@@ -9,13 +9,13 @@ import { INVITED_ENTRY_TYPE } from './../../config/defines';
 import EntryList from '../EntryList';
 import tw from 'tailwind-react-native-classnames';
 
-const InvitedForm = ({ carColors }) => {
-    const { state, handleAddEntry, handleDeleteEntryItem } = useContext(IncomeTypeContext);
+const InvitedForm = ({ data, carColors }) => {
+    const { handleAddEntry, handleDeleteEntryItem } = useContext(IncomeTypeContext);
     const [inputState, handleInputChange, clearFields] = useHandleOnChangeTextInput(VisitorSchema);
 
     useEffect(() => {
         clearFields()
-    }, [state.data]);
+    }, [data]);
     
     return (
         <>
@@ -68,10 +68,10 @@ const InvitedForm = ({ carColors }) => {
                 />
             </View>
             <EntryList 
-                data={state.data}
+                data={data}
                 deleteItem={(id) => handleDeleteEntryItem(id)} />
         </>
     )
 }
 
-export default InvitedForm
+export default React.memo(InvitedForm)
