@@ -91,8 +91,7 @@ const ProviderForm = () => {
             </View>
             <EntryListProvider 
                 data={state.data}
-                employeeQty={2}
-                employees={state.employees}
+                employeeQty={state.employee_quantity}
                 deleteItem={(id) => handleDeleteEntryItem(id)} />
         </>
     )

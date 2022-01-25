@@ -28,11 +28,8 @@ const initialState = {
     incoming_time: null,
     incoming_type_id: INVITED_ENTRY_TYPE,
     data: [],
-    employees: [
-        {"name": "Cristian", "surname": "Mendoza"},
-		{"name": "Abraham", "surname": "Sosa"}
-    ],
-    employee_quantity: 2,
+    employees: [],
+    employee_quantity: 0,
     user: null
 }
 
@@ -76,8 +73,11 @@ const entranceReducer = (state = initialState, action) => {
             let newData = [action.payload.data];
             if(action.payload.incoming_type_id === INVITED_ENTRY_TYPE)
                 newData = [...state.data, action.payload.data];
-                
-            return { ...state, data: newData }
+            return { 
+                ...state, 
+                employee_quantity: action.payload.data.employee_quantity, 
+                data: newData 
+            }
         case 'SET_REQUEST_ERROR':
             return { 
                 ...state, 
