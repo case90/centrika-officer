@@ -12,7 +12,8 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
         handleDeleteEmployee,
         handleDeleteAllEmployees,
         handleSetEmployeeQuantity, 
-        handleGenerateEmployeesObjectByQty 
+        handleEmployeeInputChange,
+        handleGenerateEmployeesObjectByQty
     } = useContext(IncomeTypeContext);
 
     useEffect(() => {
@@ -89,6 +90,7 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
                                         labelStyle={{ color: '#133C60' }}
                                         placeholder="Nombre"
                                         value={employee.name}
+                                        onChangeText={(value) => handleEmployeeInputChange(employee.id, value, 'name')}
                                     />
                                     <Text style={tw`text-black mb-3 text-base font-thin`}>Apellido</Text>
                                     <Input
@@ -98,6 +100,7 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
                                         labelStyle={{ color: '#133C60' }}
                                         placeholder="Apellido"
                                         value={employee.surname}
+                                        onChangeText={(value) => handleEmployeeInputChange(employee.id, value, 'surname')}
                                     />
                                 </View>
                                 <Button

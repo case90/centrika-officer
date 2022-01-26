@@ -88,6 +88,12 @@ const incomeTypeReducer = (state = initialState, action) => {
                 error: false,
                 message: ""
             }
+        case 'SET_EMPLOYEE_INPUT_VALUE':
+            updateEmployeeForm(state.employees, action.payload)
+            return { 
+                ...state,
+                employees: updateEmployeeForm(state.employees, action.payload)
+            }
         case 'SET_REQUEST_ERROR':
             return { 
                 ...state, 
@@ -99,6 +105,19 @@ const incomeTypeReducer = (state = initialState, action) => {
             return state
     }
 
+}
+
+const updateEmployeeForm = (employees, payload) => {
+    
+    const result = employees.map((employee) => {
+        if(employee.id == payload.id){
+            employee[payload.name] = payload.value
+        }
+
+        return employee
+    });
+    
+    return result;
 }
 
 const populateEmployeeArray = (amount) => {
@@ -224,6 +243,15 @@ const handleSetEmployeeQuantity = (dispatch) => {
     }
 }
 
+const handleEmployeeInputChange = (dispatch) => {
+    return async (id, value, name) => {
+        dispatch({ 
+            type: 'SET_EMPLOYEE_INPUT_VALUE', 
+            payload: { id, value, name } 
+        })
+    }
+}
+
 const initIncomeTypeDefaultState = (dispatch) => {
     return async () => {
         try {
@@ -304,6 +332,7 @@ export const { Context, Provider } = createDataContext(
         handleLoadEntryTypeData,
         handleDeleteAllEmployees,
         handleSetEmployeeQuantity,
+        handleEmployeeInputChange,
         initIncomeTypeDefaultState,
         handleEntryTypeContentRender,
         handleGenerateEmployeesObjectByQty,

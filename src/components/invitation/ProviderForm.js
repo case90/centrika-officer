@@ -16,6 +16,10 @@ const ProviderForm = ({ data, employeeQty, carColors }) => {
     useEffect(() => {
         clearFields()
     }, [data]);
+
+    useEffect(() => {
+        console.log('Optimizar el ProviderForm cuando se capturan datos en el form')
+    });
     
     return (
         <>
