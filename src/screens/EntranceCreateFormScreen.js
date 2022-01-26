@@ -12,27 +12,33 @@ import tw from 'tailwind-react-native-classnames';
 
 const EntranceCreateFormScreen = ({ route, navigation }) => {
     const { 
-        state, 
+        state: entranceState, 
         store,
         clearState,
         loadInvitation,
         handleSelectedStreet,
         initEntranceDefaultState,
     } = useContext(EntranceContext);
-    const incomeTypeContext = useContext(IncomeTypeContext);
+
+    const { 
+        state: incomeState,
+        handleLoadEntryTypeData,
+        initIncomeTypeDefaultState,
+        handleEntryTypeContentRender
+    } = useContext(IncomeTypeContext);
 
     useEffect(() => {
         if(route.params?.data){
             loadInvitation(route.params?.data);
-            incomeTypeContext.handleLoadEntryTypeData(route.params?.data);
+            handleLoadEntryTypeData(route.params?.data);
         }
 
-        if(state.streets.length === 0){
+        if(entranceState.streets.length === 0){
             initEntranceDefaultState();
         }
 
-        if(incomeTypeContext.state.car_colors.length === 0){
-            incomeTypeContext.initIncomeTypeDefaultState();
+        if(incomeState.car_colors.length === 0){
+            initIncomeTypeDefaultState();
         }
             
         const unsubscribe = navigation.addListener('blur', () => {
@@ -44,27 +50,27 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
     }, [route.params, navigation])
 
     const renderEntryTypeContent = () => {
-        switch(incomeTypeContext.state.incoming_type_id){
+        switch(incomeState.incoming_type_id){
             case 1:
                 return (
                     <InvitedForm 
-                        data={incomeTypeContext.state.data} 
-                        carColors={incomeTypeContext.state.car_colors} 
+                        data={incomeState.data} 
+                        carColors={incomeState.car_colors} 
                     />
                 )
             case 2:
                 return (
                     <ServiceForm 
-                        data={incomeTypeContext.state.data} 
-                        carColors={incomeTypeContext.state.car_colors} 
+                        data={incomeState.data} 
+                        carColors={incomeState.car_colors} 
                     />
                 )
             case 3:
                 return(
                     <ProviderForm 
-                        data={incomeTypeContext.state.data} 
-                        employeeQty={incomeTypeContext.state.employee_quantity} 
-                        carColors={incomeTypeContext.state.car_colors} 
+                        data={incomeState.data} 
+                        employeeQty={incomeState.employee_quantity} 
+                        carColors={incomeState.car_colors} 
                     />
                 )
         }
@@ -96,8 +102,8 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                     />
                     <Text style={tw`text-black mb-3 text-base font-thin`}>Calle</Text>
                     <StreetList
-                        data={state.streets}
-                        value={state.street_id}
+                        data={entranceState.streets}
+                        value={entranceState.street_id}
                         onPress={(item) => handleSelectedStreet(item)}
                     />
                     <Text style={tw`text-black mb-3 text-base font-thin`}>Número</Text>
@@ -114,27 +120,27 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                     <View style={tw`flex-row justify-between mb-4`}>
                         <Button
                             containerStyle={tw`w-1/3`}
-                            buttonStyle={incomeTypeContext.state.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
-                            titleStyle={incomeTypeContext.state.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="user" type='font-awesome' size={15} color={incomeTypeContext.state.incoming_type_id === INVITED_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
+                            buttonStyle={incomeState.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
+                            titleStyle={incomeState.incoming_type_id === INVITED_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
+                            icon={<Icon name="user" type='font-awesome' size={15} color={incomeState.incoming_type_id === INVITED_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Invitado"
-                            onPress={() => incomeTypeContext.handleEntryTypeContentRender(INVITED_ENTRY_TYPE)}
+                            onPress={() => handleEntryTypeContentRender(INVITED_ENTRY_TYPE)}
                         />
                         <Button
                             containerStyle={tw`w-1/3`}
-                            buttonStyle={incomeTypeContext.state.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
-                            titleStyle={incomeTypeContext.state.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="truck" type='font-awesome' size={15} color={incomeTypeContext.state.incoming_type_id === SERVICE_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
+                            buttonStyle={incomeState.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
+                            titleStyle={incomeState.incoming_type_id === SERVICE_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
+                            icon={<Icon name="truck" type='font-awesome' size={15} color={incomeState.incoming_type_id === SERVICE_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Servicio"
-                            onPress={() => incomeTypeContext.handleEntryTypeContentRender(SERVICE_ENTRY_TYPE)}
+                            onPress={() => handleEntryTypeContentRender(SERVICE_ENTRY_TYPE)}
                         />
                         <Button
                             containerStyle={tw`w-1/3`}
-                            buttonStyle={incomeTypeContext.state.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
-                            titleStyle={incomeTypeContext.state.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
-                            icon={<Icon name="car" type='font-awesome' size={15} color={incomeTypeContext.state.incoming_type_id === PROVIDER_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
+                            buttonStyle={incomeState.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryButton : styles.secondaryButton}
+                            titleStyle={incomeState.incoming_type_id === PROVIDER_ENTRY_TYPE ? styles.primaryTitleButton : styles.secondaryTitleButton}
+                            icon={<Icon name="car" type='font-awesome' size={15} color={incomeState.incoming_type_id === PROVIDER_ENTRY_TYPE ? "#ffffff" : "#ee8920"} />}
                             title="Proveedor"
-                            onPress={() => incomeTypeContext.handleEntryTypeContentRender(PROVIDER_ENTRY_TYPE)}
+                            onPress={() => handleEntryTypeContentRender(PROVIDER_ENTRY_TYPE)}
                         />
                     </View>
                     <View style={tw`mb-8`}>
@@ -151,7 +157,7 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                             containerStyle={tw`w-5/12`}
                             buttonStyle={[{backgroundColor: '#ee8920'}]}
                             title="Guardar Entrada"
-                            onPress={() => store(state)}
+                            onPress={() => store(entranceState)}
                         />
                     </View>               
                 </View>
@@ -160,15 +166,15 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
     }
 
     return (
-        !state.fetchingData
+        !entranceState.fetchingData
         ?
-            !state.error 
+            !entranceState.error 
             ? 
                 renderContent() 
             : 
                 <View style={tw`flex-1 p-5 justify-center items-center`}>
                     <Text style={tw`text-center text-lg mb-3`}>
-                        {state.message}
+                        {entranceState.message}
                     </Text>
                     <Button
                         containerStyle={{width: 120}}
