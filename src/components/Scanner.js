@@ -11,7 +11,7 @@ const initialState = {
     message: null,
     scanned: false,
     fetchingData: false,
-    hasPermission: false,
+    hasPermission: true,
     type: Camera.Constants.Type.back,
     data: null,
 }
