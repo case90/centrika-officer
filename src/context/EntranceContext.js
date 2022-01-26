@@ -40,10 +40,6 @@ const entranceReducer = (state = initialState, action) => {
             }
         case 'FETCHING_DATA':
             return { ...state, fetchingData: action.payload.fetchingData }
-        case 'SET_INITIAL_DATE':
-            return { ...state, initial_date: action.payload.initial_date }
-        case 'SET_FINAL_DATE':
-            return { ...state, final_date: action.payload.final_date }
         case 'SET_STREET_ID':
             return { ...state, street_id: action.payload.street_id }
         case 'SET_FORM_INITIAL_DATA':
@@ -185,16 +181,6 @@ const store = (dispatch) => {
     }
 }
 
-const handleSelectedDates = (dispatch) => {
-    return async (date, type) => {
-        const formatedDate = moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
-        if(type === 'initial_date')
-            dispatch({ type: 'SET_INITIAL_DATE', payload: { initial_date: formatedDate } });
-        else
-            dispatch({ type: 'SET_FINAL_DATE', payload: { final_date: formatedDate } });
-    }
-}
-
 const handleSelectedStreet = (dispatch) => {
     return async (street_id) => {
         dispatch({ type: 'SET_STREET_ID', payload: { street_id } });
@@ -218,7 +204,6 @@ export const { Context, Provider } = createDataContext(
         store, 
         clearState,
         loadInvitation,
-        handleSelectedDates,
         handleSelectedStreet,
     },
     initialState
