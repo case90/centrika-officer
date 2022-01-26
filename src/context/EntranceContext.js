@@ -74,65 +74,14 @@ const entranceReducer = (state = initialState, action) => {
 
 }
 
-const clearState = (dispatch) => {
-    return () => {
-        dispatch({type: 'CLEAR_STATE' });
-    }
-}
+const validateInvitationData = (data) => {
+    let result = { error: false }
+    if(!data.initial_date || !data.final_date)
+        return {...result, error: true, message: 'Debe seleccionar una fecha de entrada y una de salida.'}
+    if(data.data.length === 0)
+        return {...result, error: true, message: 'Debe agregar un tipo de entrada.'}
 
-const initEntranceDefaultState = (dispatch) => {
-    return async () => {
-        try {
-            dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
-            const user = JSON.parse(await AsyncStorage.getItem('user'));
-            const token = user.token
-            const streets = await httpClient.get(`streets`, {'Authorization': token});
-            if(streets){
-                dispatch({
-                    type: 'SET_FORM_INITIAL_DATA', 
-                    payload: { user, streets } 
-                });
-            }else{
-                dispatch({ 
-                    type: 'SET_REQUEST_ERROR', 
-                    payload: { 
-                        error: true, 
-                        message: 'No ha sido posible obtener las calles.' 
-                    } 
-                });
-            }
-        } catch (error) {
-            dispatch({ 
-                type: 'SET_REQUEST_ERROR', 
-                payload: { 
-                    error: true, 
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
-                } 
-            });
-        }
-        
-        
-    }
-}
-
-const loadInvitation = (dispatch) => {
-    return async (data) => {
-        if(data){
-            dispatch({ 
-                type: 'LOAD_INVITATION_DATA',
-                payload: {...data }
-            });
-        }else{
-            dispatch({ 
-                type: 'SET_REQUEST_ERROR', 
-                payload: { 
-                    error: true, 
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
-                } 
-            });
-        }
-
-    }
+    return result
 }
 
 const store = (dispatch) => {
@@ -181,30 +130,82 @@ const store = (dispatch) => {
     }
 }
 
+const clearState = (dispatch) => {
+    return () => {
+        dispatch({type: 'CLEAR_STATE' });
+    }
+}
+
+const loadInvitation = (dispatch) => {
+    return async (data) => {
+        if(data){
+            dispatch({ 
+                type: 'LOAD_INVITATION_DATA',
+                payload: {...data }
+            });
+        }else{
+            dispatch({ 
+                type: 'SET_REQUEST_ERROR', 
+                payload: { 
+                    error: true, 
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
+                } 
+            });
+        }
+
+    }
+}
+
 const handleSelectedStreet = (dispatch) => {
     return async (street_id) => {
         dispatch({ type: 'SET_STREET_ID', payload: { street_id } });
     }
 }
 
-const validateInvitationData = (data) => {
-    let result = { error: false }
-    if(!data.initial_date || !data.final_date)
-        return {...result, error: true, message: 'Debe seleccionar una fecha de entrada y una de salida.'}
-    if(data.data.length === 0)
-        return {...result, error: true, message: 'Debe agregar un tipo de entrada.'}
-
-    return result
+const initEntranceDefaultState = (dispatch) => {
+    return async () => {
+        try {
+            dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+            const user = JSON.parse(await AsyncStorage.getItem('user'));
+            const token = user.token
+            const streets = await httpClient.get(`streets`, {'Authorization': token});
+            if(streets){
+                dispatch({
+                    type: 'SET_FORM_INITIAL_DATA', 
+                    payload: { user, streets } 
+                });
+            }else{
+                dispatch({ 
+                    type: 'SET_REQUEST_ERROR', 
+                    payload: { 
+                        error: true, 
+                        message: 'No ha sido posible obtener las calles.' 
+                    } 
+                });
+            }
+        } catch (error) {
+            dispatch({ 
+                type: 'SET_REQUEST_ERROR', 
+                payload: { 
+                    error: true, 
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
+                } 
+            });
+        }
+        
+        
+    }
 }
 
 export const { Context, Provider } = createDataContext(
     entranceReducer, 
     { 
-        initEntranceDefaultState, 
+        
         store, 
         clearState,
         loadInvitation,
         handleSelectedStreet,
+        initEntranceDefaultState,
     },
     initialState
 );
