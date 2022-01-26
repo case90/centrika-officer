@@ -84,29 +84,24 @@ const clearState = (dispatch) => {
     }
 }
 
-const initDefaultState = (dispatch) => {
+const initEntranceDefaultState = (dispatch) => {
     return async () => {
         try {
             dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
             const user = JSON.parse(await AsyncStorage.getItem('user'));
             const token = user.token
-            const colors = await httpClient.get(`car_colors`, {'Authorization': token});
             const streets = await httpClient.get(`streets`, {'Authorization': token});
-            if(colors){
+            if(streets){
                 dispatch({
                     type: 'SET_FORM_INITIAL_DATA', 
-                    payload: { 
-                        car_colors: colors,
-                        user,
-                        streets
-                    } 
+                    payload: { user, streets } 
                 });
             }else{
                 dispatch({ 
                     type: 'SET_REQUEST_ERROR', 
                     payload: { 
                         error: true, 
-                        message: 'No ha sido posible obtener los colores.' 
+                        message: 'No ha sido posible obtener las calles.' 
                     } 
                 });
             }
@@ -219,7 +214,7 @@ const validateInvitationData = (data) => {
 export const { Context, Provider } = createDataContext(
     entranceReducer, 
     { 
-        initDefaultState, 
+        initEntranceDefaultState, 
         store, 
         clearState,
         loadInvitation,

@@ -1,5 +1,7 @@
 import { Alert } from 'react-native'
 import createDataContext from './createDataContext'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import httpClient from '../services/httpClient'
 import { INVITED_ENTRY_TYPE, PROVIDER_ENTRY_TYPE } from '../config/defines';
 
 const initialState = {
@@ -77,6 +79,21 @@ const incomeTypeReducer = (state = initialState, action) => {
                 ...state, 
                 employees: populateEmployeeArray(action.payload.employeeQty),
                 employeeQty: action.payload.employeeQty,
+            }
+        case 'SET_CAR_COLORS':
+            return { 
+                ...state,
+                car_colors: action.payload.car_colors,
+                fetchingData: false,
+                error: false,
+                message: ""
+            }
+        case 'SET_REQUEST_ERROR':
+            return { 
+                ...state, 
+                error: true,
+                message: action.payload.message,
+                fetchingData: false
             }
         default:
             return state
@@ -207,6 +224,41 @@ const handleSetEmployeeQuantity = (dispatch) => {
     }
 }
 
+const initIncomeTypeDefaultState = (dispatch) => {
+    return async () => {
+        try {
+            dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+            const user = JSON.parse(await AsyncStorage.getItem('user'));
+            const token = user.token
+            const car_colors = await httpClient.get(`car_colors`, {'Authorization': token});
+            if(car_colors){
+                dispatch({
+                    type: 'SET_CAR_COLORS', 
+                    payload: { car_colors } 
+                });
+            }else{
+                dispatch({ 
+                    type: 'SET_REQUEST_ERROR', 
+                    payload: { 
+                        error: true, 
+                        message: 'No ha sido posible obtener los colores.' 
+                    } 
+                });
+            }
+        } catch (error) {
+            dispatch({ 
+                type: 'SET_REQUEST_ERROR', 
+                payload: { 
+                    error: true, 
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
+                } 
+            });
+        }
+        
+        
+    }
+}
+
 const handleEntryTypeContentRender = (dispatch, state) => {
     return async (incoming_type_id) => {
         if(state.data.length === 0){
@@ -252,6 +304,7 @@ export const { Context, Provider } = createDataContext(
         handleLoadEntryTypeData,
         handleDeleteAllEmployees,
         handleSetEmployeeQuantity,
+        initIncomeTypeDefaultState,
         handleEntryTypeContentRender,
         handleGenerateEmployeesObjectByQty,
     },

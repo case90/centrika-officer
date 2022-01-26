@@ -16,8 +16,8 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
         store,
         clearState,
         loadInvitation,
-        initDefaultState,
         handleSelectedStreet,
+        initEntranceDefaultState,
     } = useContext(EntranceContext);
     const incomeTypeContext = useContext(IncomeTypeContext);
 
@@ -27,8 +27,12 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
             incomeTypeContext.handleLoadEntryTypeData(route.params?.data);
         }
 
-        if(state.car_colors.length === 0 || state.streets.length === 0){
-            initDefaultState();
+        if(state.streets.length === 0){
+            initEntranceDefaultState();
+        }
+
+        if(incomeTypeContext.state.car_colors.length === 0){
+            incomeTypeContext.initIncomeTypeDefaultState();
         }
             
         const unsubscribe = navigation.addListener('blur', () => {
