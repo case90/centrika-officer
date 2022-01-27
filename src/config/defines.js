@@ -7,4 +7,4 @@ export const apiUrlBase = 'http://cpxproject.com/sistema_centrika/api'
  export const SERVICE_ENTRY_TYPE = 2
  export const PROVIDER_ENTRY_TYPE = 3
 
- export const MAX_EMPLOYEE_QUANTITY = 3
+ export const MAX_EMPLOYEE_QUANTITY = 20
