@@ -27,7 +27,7 @@ const StreetList = ({ data, value, onPress }) => {
     )
 }
 
-export default StreetList
+export default React.memo(StreetList)
 
 const styles = StyleSheet.create({
     activeItem: {
