@@ -6,9 +6,9 @@ import { Context as IncomeTypeContext} from './../context/IncomeTypeContext';
 import InvitedForm from './../components/invitation/InvitedForm';
 import ProviderForm from './../components/invitation/ProviderForm';
 import ServiceForm from './../components/invitation/ServiceForm';
-import StreetList from './../components/StreetList';
 import { INVITED_ENTRY_TYPE, SERVICE_ENTRY_TYPE, PROVIDER_ENTRY_TYPE } from './../config/defines';
 import tw from 'tailwind-react-native-classnames';
+import NeighborForm from '../components/NeighborForm';
 
 const EntranceCreateFormScreen = ({ route, navigation }) => {
     const { 
@@ -16,7 +16,6 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
         store,
         clearState,
         loadInvitation,
-        handleSelectedStreet,
         initEntranceDefaultState,
     } = useContext(EntranceContext);
 
@@ -100,22 +99,7 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                         placeholder="Seleccione fecha"
                         value="RMK123"
                     />
-                    <Text style={tw`text-black mb-3 text-base font-thin`}>Calle</Text>
-                    <StreetList
-                        data={entranceState.streets}
-                        value={entranceState.street_id}
-                        onPress={(item) => handleSelectedStreet(item)}
-                    />
-                    <Text style={tw`text-black mb-3 text-base font-thin`}>Número</Text>
-                    <Input
-                        rightIcon={<Icon type='font-awesome' name='search' size={25} color='#ee8920' />}
-                        inputStyle={tw`ml-3 text-sm`}
-                        inputContainerStyle={tw`border pl-2 pr-2 rounded-md`}
-                        containerStyle={tw`flex-1 p-0`}
-                        labelStyle={{ color: '#133C60' }}
-                        placeholder="Seleccione fecha"
-                        value="RMK123"
-                    />
+                    <NeighborForm />
                     <Text style={tw`text-black text-xl font-thin mb-2`}>Tipo de entrada</Text>
                     <View style={tw`flex-row justify-between mb-4`}>
                         <Button

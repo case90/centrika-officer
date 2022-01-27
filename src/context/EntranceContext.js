@@ -13,6 +13,7 @@ const initialState = {
     final_date: "",
     car_colors: [],
     streets: [],
+    address: [],
     street_id: null,
     car_tag: "",
     name: "",
@@ -52,6 +53,21 @@ const entranceReducer = (state = initialState, action) => {
                 error: false,
                 message: ""
             }
+        case 'SET_ADDRESS_NEIGHBOR':
+            return { 
+                ...state,
+                address: action.payload.address,
+                number: action.payload.number,
+                street_id: action.payload.street_id,
+                fetchingData: false,
+                error: false,
+                message: ""
+            }
+        case 'SET_ADDRESS_NUMBER':
+            return { 
+                ...state,
+                number: action.payload.number,
+            }
         case 'SET_REQUEST_ERROR':
             return { 
                 ...state, 
@@ -59,6 +75,8 @@ const entranceReducer = (state = initialState, action) => {
                 message: action.payload.message,
                 fetchingData: false
             }
+        case 'DELETE_NEIGHBOR_ADDRESS':
+            return { ...state, address: [] }
         case 'LOAD_INVITATION_DATA':
             return { 
                 ...state,
@@ -136,6 +154,56 @@ const clearState = (dispatch) => {
     }
 }
 
+const fetchAddress = (dispatch) => {
+    return async(number, street_id) => {
+        try {
+            if(number && street_id){
+                dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+                const user = JSON.parse(await AsyncStorage.getItem('user'));
+                const token = user.token
+                const response = await httpClient.get(`addresses?number=${number}&street_id=${street_id}`, {'Authorization': token});
+                if(response.length > 0){
+                    dispatch({ 
+                        type: 'SET_ADDRESS_NEIGHBOR', 
+                        payload: { 
+                            address: response,
+                            number,
+                            street_id
+                        } 
+                    });
+                }else{
+                    Alert.alert(
+                        "Ha ocurrido un error",
+                        `No se encontraron registros para la dirección con número ${number} calle ${street_id}.`,
+                        [{ 
+                            text: "Aceptar", 
+                            onPress: dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
+                        }]
+                    )
+                }
+            }else{
+                Alert.alert(
+                    "Ha ocurrido un error",
+                    'Debe seleccionar una calle y escribir un número valido de casa.',
+                    [{ 
+                        text: "Aceptar", 
+                        onPress: dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
+                    }]
+                )
+            }
+         
+        } catch (error) {
+            dispatch({ 
+                type: 'SET_REQUEST_ERROR', 
+                payload: { 
+                    error: true, 
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
+                } 
+            });
+        }
+    }
+}
+
 const loadInvitation = (dispatch) => {
     return async (data) => {
         if(data){
@@ -156,9 +224,24 @@ const loadInvitation = (dispatch) => {
     }
 }
 
+const setAddressNumber = (dispatch) => {
+    return async (number) => {
+        dispatch({ 
+            type: 'SET_ADDRESS_NUMBER',
+            payload: { number }
+        });
+    }
+}
+
 const handleSelectedStreet = (dispatch) => {
     return async (street_id) => {
         dispatch({ type: 'SET_STREET_ID', payload: { street_id } });
+    }
+}
+
+const deleteNeighborAddress = (dispatch) => {
+    return async () => {
+        dispatch({type: 'DELETE_NEIGHBOR_ADDRESS'});
     }
 }
 
@@ -203,8 +286,11 @@ export const { Context, Provider } = createDataContext(
         
         store, 
         clearState,
+        fetchAddress,
         loadInvitation,
+        setAddressNumber,
         handleSelectedStreet,
+        deleteNeighborAddress,
         initEntranceDefaultState,
     },
     initialState
