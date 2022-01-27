@@ -29,7 +29,6 @@ const incomeTypeReducer = (state = initialState, action) => {
                 newData = [...state.data, action.payload.data];
             return { 
                 ...state, 
-                employee_quantity: action.payload.data.employee_quantity, 
                 data: newData 
             }
         case 'SET_INITIAL_DATA':
