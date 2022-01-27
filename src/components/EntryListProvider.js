@@ -56,6 +56,7 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
                                 <Text style={tw`text-black mb-3 text-base font-thin`}>Cantidad de empleados</Text>
                                 <IntegerInput 
                                     value={`${state.employeeQty}`} 
+                                    maxLength={2}
                                     onPress={(type, qty) => handleSetEmployeeQuantity(type, qty)}
                                 />
                                 {

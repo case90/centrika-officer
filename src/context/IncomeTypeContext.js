@@ -2,7 +2,7 @@ import { Alert } from 'react-native'
 import createDataContext from './createDataContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import httpClient from '../services/httpClient'
-import { INVITED_ENTRY_TYPE, PROVIDER_ENTRY_TYPE } from '../config/defines';
+import { INVITED_ENTRY_TYPE, PROVIDER_ENTRY_TYPE, MAX_EMPLOYEE_QUANTITY } from '../config/defines';
 
 const initialState = {
     error: false,
@@ -234,12 +234,34 @@ const handleDeleteAllEmployees = (dispatch) => {
     }
 }
 
-const handleSetEmployeeQuantity = (dispatch) => {
-    return async (type, qty) => {
-        dispatch({ 
-            type: 'SET_EMPLOYEE_QTY', 
-            payload: { type, qty } 
-        })
+const handleSetEmployeeQuantity = (dispatch, state) => {
+    return (type, qty) => {
+        
+        if(type == 'increase'){
+            const employeeQty = parseInt(state.employeeQty)
+            if((employeeQty + qty) <= MAX_EMPLOYEE_QUANTITY){
+                dispatch({ 
+                    type: 'SET_EMPLOYEE_QTY', 
+                    payload: { type, qty } 
+                })
+            }else{
+                Alert.alert(
+                    "Ha ocurrido un error",
+                    `La cantidad maxima de empleados permitida es de ${MAX_EMPLOYEE_QUANTITY}`,
+                    [
+                        {
+                            text: "Aceptar"
+                        },
+                    ]
+                )
+            }
+            
+        }else{
+            dispatch({ 
+                type: 'SET_EMPLOYEE_QTY', 
+                payload: { type, qty } 
+            })
+        }
     }
 }
 

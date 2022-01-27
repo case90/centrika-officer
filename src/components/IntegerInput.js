@@ -3,7 +3,7 @@ import { View, TextInput, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements';
 import tw from 'tailwind-react-native-classnames';
 
-const IntegerInput = ({ value, onPress }) => {
+const IntegerInput = ({ value, onPress, maxLength }) => {
     return (
         <View style={tw`flex-row border border-gray-500 rounded-md mb-5`}>
             <TouchableOpacity 
@@ -16,6 +16,7 @@ const IntegerInput = ({ value, onPress }) => {
             <TextInput
                 style={tw`w-8/12 text-center text-xl text-black`}
                 editable={false}
+                maxLength={maxLength}
                 value={value ? value : '1'}
             />
             <TouchableOpacity 
