@@ -28,7 +28,13 @@ const NeighborForm = () => {
             />
             <Text style={tw`text-black mb-3 text-base font-thin`}>Número</Text>
             <Input
-                rightIcon={<Icon type='font-awesome' name='search' size={25} color='#ee8920' />}
+                rightIcon={(
+                    <TouchableOpacity
+                        onPress={() => fetchAddress(state.number, state.street_id)}    
+                    >
+                        <Icon type='font-awesome' name='search' size={25} color='#ee8920' />
+                    </TouchableOpacity>
+                )}
                 inputStyle={tw`ml-3 text-sm`}
                 inputContainerStyle={tw`border pl-2 pr-2 rounded-md`}
                 containerStyle={tw`flex-1 p-0`}
