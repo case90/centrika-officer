@@ -55,7 +55,7 @@ const NeighborForm = () => {
                                 <View key={item.id} style={tw`flex-row rounded-md mb-3 border border-gray-400 items-center`}>
                                     <TouchableOpacity 
                                         style={tw`rounded-l-md p-3 bg-red-700`}
-                                        onPress={() => deleteNeighborAddress()}
+                                        onPress={() => deleteNeighborAddress(item.id)}
                                     >
                                         <Icon type='font-awesome' name='trash' size={25} color='white' />
                                     </TouchableOpacity>

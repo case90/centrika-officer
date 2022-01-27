@@ -76,7 +76,8 @@ const entranceReducer = (state = initialState, action) => {
                 fetchingData: false
             }
         case 'DELETE_NEIGHBOR_ADDRESS':
-            return { ...state, address: [] }
+            let address = state.address.filter((item) => item.id !== action.payload.id)
+            return { ...state, address }
         case 'LOAD_INVITATION_DATA':
             return { 
                 ...state,
@@ -240,8 +241,11 @@ const handleSelectedStreet = (dispatch) => {
 }
 
 const deleteNeighborAddress = (dispatch) => {
-    return async () => {
-        dispatch({type: 'DELETE_NEIGHBOR_ADDRESS'});
+    return async (id) => {
+        dispatch({
+            type: 'DELETE_NEIGHBOR_ADDRESS',
+            payload: { id }
+        });
     }
 }
 
