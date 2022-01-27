@@ -30,17 +30,6 @@ const ServiceForm = ({ data, carColors }) => {
                 value={inputState.name}
                 onChangeText={(value) => handleInputChange(value, 'name')}
             />
-            <Text style={tw`mb-2`}>Placas del carro</Text>
-            <Input
-                leftIcon={<Icon type='font-awesome' name='file-text' size={25} color='black' />}
-                inputStyle={tw`ml-3 text-sm`}
-                inputContainerStyle={tw`border pl-2 rounded-md`}
-                containerStyle={tw`flex-1 p-0`}
-                labelStyle={{ color: '#133C60' }}
-                placeholder="Placas del carro"
-                value={inputState.car_tag}
-                onChangeText={(value) => handleInputChange(value, 'car_tag')}
-            />
             <Text style={tw`mb-2`}>Modelo del carro</Text>
             <Input
                 leftIcon={<Icon type='font-awesome' name='car' size={25} color='black' />}

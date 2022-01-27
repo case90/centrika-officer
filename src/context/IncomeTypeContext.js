@@ -146,8 +146,6 @@ const validateEntryData = (data) => {
         return {...result, error: true, message: 'El modelo es requerido.'}
     if(!data.car_color_id)
         return {...result, error: true, message: 'El color es requerido.'}
-    if(!data.car_tag)
-        return {...result, error: true, message: 'Las placas son requeridas.'}
 
     return result
 }
@@ -160,8 +158,6 @@ const validateSupplierData = (data) => {
         return {...result, error: true, message: 'El modelo es requerido.'}
     if(!data.car_color_id)
         return {...result, error: true, message: 'El color es requerido.'}
-    if(!data.car_tag)
-        return {...result, error: true, message: 'Las placas son requeridas.'}
     if(!data.reason)
         return {...result, error: true, message: 'El equipo es requerido.'}
 
