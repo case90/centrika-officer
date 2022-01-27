@@ -9,7 +9,7 @@ const initialState = {
     message: "",
     fetchingData: false,
     incoming_type_id: INVITED_ENTRY_TYPE,
-    employee_quantity: 0,
+    employee_quantity: 1,
     data: [],
     employees: [],
     car_colors: [],
@@ -164,8 +164,6 @@ const validateSupplierData = (data) => {
         return {...result, error: true, message: 'Las placas son requeridas.'}
     if(!data.reason)
         return {...result, error: true, message: 'El equipo es requerido.'}
-    if(!data.employee_quantity)
-        return {...result, error: true, message: 'La cantidad de empleados es requerida.'}
 
     return result
 }
@@ -236,7 +234,7 @@ const handleDeleteAllEmployees = (dispatch) => {
 
 const handleSetEmployeeQuantity = (dispatch, state) => {
     return (type, qty) => {
-        
+
         if(type == 'increase'){
             const employeeQty = parseInt(state.employeeQty)
             if((employeeQty + qty) <= MAX_EMPLOYEE_QUANTITY){

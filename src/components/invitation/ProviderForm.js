@@ -34,17 +34,6 @@ const ProviderForm = ({ data, employeeQty, carColors }) => {
                 value={inputState.name}
                 onChangeText={(value) => handleInputChange(value, 'name')}
             />
-            <Text style={tw`mb-2`}>Número de empleados</Text>
-            <Input
-                leftIcon={<Icon type='font-awesome' name='users' size={25} color='black' />}
-                inputStyle={tw`ml-3 text-sm`}
-                inputContainerStyle={tw`border pl-2 rounded-md`}
-                containerStyle={tw`flex-1 p-0`}
-                labelStyle={{ color: '#133C60' }}
-                placeholder="Número de empleado"
-                value={inputState.employee_quantity}
-                onChangeText={(value) => handleInputChange(value, 'employee_quantity')}
-            />
             <Text style={tw`mb-2`}>Equipo</Text>
             <Input
                 leftIcon={<Icon type='font-awesome' name='handshake-o' size={25} color='black' />}
