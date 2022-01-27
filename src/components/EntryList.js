@@ -11,15 +11,11 @@ const EntryList = ({ data, deleteItem }) => {
                     return (
                         <View 
                             key={item.id}
-                            style={tw`flex-row items-center pl-5 pr-5 pt-2 pb-2 bg-gray-200 mb-1 border border-gray-300`}>
-                            <View style={tw`flex-1`}>
+                            style={tw`flex-row items-center bg-gray-200 mb-3 border border-gray-300`}>
+                            <View style={tw`flex-1 pl-5`}>
                                 <Text style={tw`text-black text-lg font-thin`}>{item.name}</Text>
                                 <View style={tw`flex-row`}>
                                     <View style={tw`flex-row items-center`}>
-                                        <Text style={tw`text-black text-sm font-thin`}>Placas:</Text>
-                                        <Text style={tw`text-gray-500 text-sm font-thin ml-1`}>{item.car_tag}</Text>
-                                    </View>
-                                    <View style={tw`ml-3 flex-row items-center`}>
                                         <Text style={tw`text-black text-sm font-thin`}>Modelo:</Text>
                                         <Text style={tw`text-gray-500 text-sm font-thin ml-1`}>{item.car_model}</Text>
                                     </View>
@@ -27,8 +23,9 @@ const EntryList = ({ data, deleteItem }) => {
                             </View>
                             <TouchableOpacity 
                                 key={item.id}
+                                style={tw`bg-green-300 pl-5 pr-5 pt-7 pb-7 bg-red-700`}
                                 onPress={() => deleteItem(item.id)}>
-                                <Icon type='font-awesome' name='trash' size={25} color='red'/>
+                                <Icon type='font-awesome' name='trash' size={25} color='white'/>
                             </TouchableOpacity>
                         </View>
                     )
