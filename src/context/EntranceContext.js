@@ -3,14 +3,13 @@ import createDataContext from './createDataContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import httpClient from '../services/httpClient'
 import * as rootNavigation from '../helpers/rootNavigation';
+import { PROVIDER_ENTRY_TYPE } from './../config/defines';
 import moment from 'moment';
 
 const initialState = {
     error: false,
     message: "",
     fetchingData: false,
-    initial_date: "",
-    final_date: "",
     car_colors: [],
     streets: [],
     address: [],
@@ -24,7 +23,7 @@ const initialState = {
     car_color_id: null,
     equip_description: "",
     company: "",
-    reason: "",
+    equip_description: "",
     incoming_time: null,
     data: [],
     user: null
@@ -68,6 +67,11 @@ const entranceReducer = (state = initialState, action) => {
                 ...state,
                 number: action.payload.number,
             }
+        case 'SET_CAR_TAG_VALUE':
+            return { 
+                ...state,
+                car_tag: action.payload.car_tag,
+            }
         case 'SET_REQUEST_ERROR':
             return { 
                 ...state, 
@@ -87,6 +91,16 @@ const entranceReducer = (state = initialState, action) => {
                 street_id: action.payload.address.street.id,
                 fetchingData: false
             }
+        case 'SET_CAR_TAG_SEARCH_RESPONSE':
+            return { 
+                ...state,
+                error: false,
+                message: "",
+                fetchingData: false,
+                address: [action.payload.response.address],
+                street_id: parseInt(action.payload.response.address.street_id),
+                number: action.payload.response.address.number,
+            }
         default:
             return state
     }
@@ -99,6 +113,51 @@ const validateInvitationData = (data) => {
         return {...result, error: true, message: 'Debe seleccionar una fecha de entrada y una de salida.'}
     if(data.data.length === 0)
         return {...result, error: true, message: 'Debe agregar un tipo de entrada.'}
+
+    return result
+}
+
+const getProviderObjectFormatType = (incoming) => {
+    return {
+        incoming_type_id:  incoming.incoming_type_id,
+        employee_quantity: incoming.data[0]?.employee_quantity,
+        employees: incoming.data[0]?.employees,
+        data: [{
+            car_color_id: parseInt(incoming.car_color_id),
+            car_model: incoming.car_model,
+            car_tag: incoming.car_tag,
+            employee_quantity: incoming.data[0]?.employee_quantity,
+            id: incoming.data[0]?.id,
+            name: incoming.name,
+            equip_description: incoming.equip_description,
+        }],
+    }
+}
+
+const getEntryTypeStandadObjectFormat = (incoming) => {
+    return {
+        incoming_type_id:  incoming.incoming_type_id,
+        employee_quantity: 1,
+        employees: [],
+        data: [{
+            car_color_id: parseInt(incoming.car_color_id),
+            car_model: incoming.car_model,
+            car_tag: incoming.car_tag,
+            employee_quantity: 1,
+            id: incoming.id,
+            name: incoming.name,
+            equip_description: incoming.equip_description,
+        }],
+    }
+}
+
+const createIncomeStateFormat = (incoming) => {
+
+    let result = null;
+
+    result = getEntryTypeStandadObjectFormat(incoming)
+    if(incoming.incoming_type_id == PROVIDER_ENTRY_TYPE)
+        result = getProviderObjectFormatType(incoming)
 
     return result
 }
@@ -225,12 +284,57 @@ const loadInvitation = (dispatch) => {
     }
 }
 
+const setCarTagValue = (dispatch) => {
+    return async (car_tag) => {
+        dispatch({ 
+            type: 'SET_CAR_TAG_VALUE',
+            payload: { car_tag }
+        });
+    }
+}
+
 const setAddressNumber = (dispatch) => {
     return async (number) => {
         dispatch({ 
             type: 'SET_ADDRESS_NUMBER',
             payload: { number }
         });
+    }
+}
+
+const setFetchTagResponse = (dispatch) => {
+    return async(car_tag, setIncomeData) => {
+        try {
+            dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+            const user = JSON.parse(await AsyncStorage.getItem('user'));
+            const token = user.token
+            const response = await httpClient.get(`incomings?car_tag=${car_tag}`, {'Authorization': token});
+            if(Object.keys(response).length > 0){
+                const incomeData = createIncomeStateFormat(response);
+                setIncomeData(incomeData);
+                dispatch({ 
+                    type: 'SET_CAR_TAG_SEARCH_RESPONSE', 
+                    payload: { response } 
+                });
+            }else{
+                Alert.alert(
+                    "Ha ocurrido un error",
+                    `No se encontraron registros para el número de placas: ${car_tag}.`,
+                    [{ 
+                        text: "Aceptar", 
+                        onPress: dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
+                    }]
+                )
+            }
+        } catch (error) {
+            dispatch({ 
+                type: 'SET_REQUEST_ERROR', 
+                payload: { 
+                    error: true, 
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
+                } 
+            });
+        }
     }
 }
 
@@ -287,12 +391,13 @@ const initEntranceDefaultState = (dispatch) => {
 export const { Context, Provider } = createDataContext(
     entranceReducer, 
     { 
-        
         store, 
         clearState,
         fetchAddress,
         loadInvitation,
+        setCarTagValue,
         setAddressNumber,
+        setFetchTagResponse,
         handleSelectedStreet,
         deleteNeighborAddress,
         initEntranceDefaultState,

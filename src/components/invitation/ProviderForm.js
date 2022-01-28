@@ -42,8 +42,8 @@ const ProviderForm = ({ data, employeeQty, carColors }) => {
                 containerStyle={tw`flex-1 p-0`}
                 labelStyle={{ color: '#133C60' }}
                 placeholder="Equipo"
-                value={inputState.reason}
-                onChangeText={(value) => handleInputChange(value, 'reason')}
+                value={inputState.equip_description}
+                onChangeText={(value) => handleInputChange(value, 'equip_description')}
             />
             <Text style={tw`mb-2`}>Modelo del carro</Text>
             <Input

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements';
 import { Context as EntranceContext} from './../context/EntranceContext';
 import { Context as IncomeTypeContext} from './../context/IncomeTypeContext';
@@ -16,6 +16,8 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
         store,
         clearState,
         loadInvitation,
+        setCarTagValue,
+        setFetchTagResponse,
         initEntranceDefaultState,
     } = useContext(EntranceContext);
 
@@ -75,6 +77,10 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
         }
     }
 
+    const handleFetchByTag = (car_tag) => {
+        setFetchTagResponse(car_tag, handleLoadEntryTypeData);
+    }
+
     const renderContent = () => {
         return (
             <ScrollView 
@@ -91,13 +97,20 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                     />
                     <Text style={tw`text-black mb-3 text-base font-thin`}>Buscar placas de carro</Text>
                     <Input
-                        rightIcon={<Icon type='font-awesome' name='search' size={25} color='#ee8920' />}
+                        rightIcon={(
+                            <TouchableOpacity
+                                onPress={() => handleFetchByTag(entranceState.car_tag)} >
+                                    <Icon type='font-awesome' name='search' size={25} color='#ee8920' />
+                            </TouchableOpacity>
+                        )}
                         inputStyle={tw`ml-3 text-sm`}
                         inputContainerStyle={tw`border pl-2 pr-2 rounded-md`}
                         containerStyle={tw`flex-1 p-0`}
                         labelStyle={{ color: '#133C60' }}
-                        placeholder="Seleccione fecha"
-                        value="RMK123"
+                        placeholder="Escriba una placa"
+                        value={entranceState.car_tag}
+                        onChangeText={(car_tag) => setCarTagValue(car_tag)}
+                        onSubmitEditing={(e) => handleFetchByTag(e.nativeEvent.text)}
                     />
                     <NeighborForm />
                     <Text style={tw`text-black text-xl font-thin mb-2`}>Tipo de entrada</Text>

@@ -29,34 +29,30 @@ const incomeTypeReducer = (state = initialState, action) => {
                 newData = [...state.data, action.payload.data];
             return { 
                 ...state, 
-                data: newData 
-            }
-        case 'SET_INITIAL_DATA':
-            return { 
-                ...state, 
-                employees: populateEmployeeArray(action.payload.employeeQty),
-                employeeQty: action.payload.employeeQty,
+                data: newData,
+                employee_quantity: 1,
+                employees: populateEmployeeArray(1),
             }
         case 'DELETE_ALL_EMPLOYEES':
             return { 
                 ...state, 
                 employees: [],
-                employeeQty: 0,
+                employee_quantity: 0,
             }
         case 'DELETE_EMPLOYEE':
             const filteredEmployees = state.employees.filter((item) => item.id != action.payload.id)
             return { 
                 ...state,
-                employeeQty: filteredEmployees.length,
+                employee_quantity: filteredEmployees.length,
                 employees: filteredEmployees
             }
         case 'SET_EMPLOYEE_QTY':
-            const employeeQty = calculateEmployeeQty(action.payload.type, state.employeeQty, action.payload.qty)
-            const employees = populateEmployeeArray(employeeQty)
+            let employee_quantity = calculateEmployeeQty(action.payload.type, state.employee_quantity, action.payload.qty)
+            let employees = populateEmployeeArray(employee_quantity)
             return { 
                 ...state, 
                 employees,
-                employeeQty
+                employee_quantity
             }
         case 'RENDER_ENTRY_TYPE_CONTENT':
             return { 
@@ -70,14 +66,14 @@ const incomeTypeReducer = (state = initialState, action) => {
                 ...state, 
                 incoming_type_id:  parseInt(action.payload.incoming_type_id),
                 employee_quantity: providerData.employee_quantity,
-                employees: populateEmployeeArray(providerData.employee_quantity),
+                employees: action.payload.employees ? action.payload.employees : populateEmployeeArray(providerData.employee_quantity),
                 data: [providerData],
             }
         case 'GENERATE_EMPLOYEES_OBJECTS_BY_QTY':
             return { 
                 ...state, 
-                employees: populateEmployeeArray(action.payload.employeeQty),
-                employeeQty: action.payload.employeeQty,
+                employees: populateEmployeeArray(action.payload.employee_quantity),
+                employee_quantity: action.payload.employee_quantity,
             }
         case 'SET_CAR_COLORS':
             return { 
@@ -157,7 +153,7 @@ const validateSupplierData = (data) => {
         return {...result, error: true, message: 'El modelo es requerido.'}
     if(!data.car_color_id)
         return {...result, error: true, message: 'El color es requerido.'}
-    if(!data.reason)
+    if(!data.equip_description)
         return {...result, error: true, message: 'El equipo es requerido.'}
 
     return result
@@ -231,8 +227,8 @@ const handleSetEmployeeQuantity = (dispatch, state) => {
     return (type, qty) => {
 
         if(type == 'increase'){
-            const employeeQty = parseInt(state.employeeQty)
-            if((employeeQty + qty) <= MAX_EMPLOYEE_QUANTITY){
+            const employee_quantity = parseInt(state.employee_quantity)
+            if((employee_quantity + qty) <= MAX_EMPLOYEE_QUANTITY){
                 dispatch({ 
                     type: 'SET_EMPLOYEE_QTY', 
                     payload: { type, qty } 
@@ -329,10 +325,10 @@ const handleEntryTypeContentRender = (dispatch, state) => {
 }
 
 const handleGenerateEmployeesObjectByQty = (dispatch) => {
-    return async (employeeQty) => {
+    return async (employee_quantity) => {
         dispatch({ 
             type: 'GENERATE_EMPLOYEES_OBJECTS_BY_QTY', 
-            payload: { employeeQty } 
+            payload: { employee_quantity } 
         })
     }
 }

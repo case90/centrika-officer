@@ -17,6 +17,6 @@ export const ProviderSchema = {
     car_model: '',
     car_tag: '',
     car_color_id: null,
-    reason: '',
+    equip_description: '',
     employee_quantity: null
 };

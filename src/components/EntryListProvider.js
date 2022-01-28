@@ -18,7 +18,7 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
     } = useContext(IncomeTypeContext);
 
     useEffect(() => {
-        if(employeeQty){
+        if(employeeQty && state.employees.length == 0){
             handleGenerateEmployeesObjectByQty(employeeQty)
         }
     }, [employeeQty])
@@ -36,12 +36,12 @@ const EntryListProvider = ({ data, deleteItem, employeeQty }) => {
                                 <Text style={tw`text-black text-xl font-thin pb-3`}>Alta de Empleados</Text>
                                 <Text style={tw`text-black mb-3 text-base font-thin`}>Cantidad de empleados</Text>
                                 <IntegerInput 
-                                    value={`${state.employeeQty}`} 
+                                    value={`${state.employee_quantity}`} 
                                     maxLength={2}
                                     onPress={(type, qty) => handleSetEmployeeQuantity(type, qty)}
                                 />
                                 {
-                                    state.employeeQty > 0
+                                    state.employee_quantity > 0
                                     ?
                                     <View style={tw`flex-row justify-between`}>
                                         <Button
