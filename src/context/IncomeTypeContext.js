@@ -13,6 +13,12 @@ const initialState = {
     data: [],
     employees: [],
     car_colors: [],
+    reason_list: [
+        { reason: 'Entrega de comida', value: '1' },
+        { reason: 'Paqueteria', value: '2' },
+        { reason: 'Super', value: '3' },
+        { reason: 'Otros', value: '4' },
+    ],
 }
 
 const incomeTypeReducer = (state = initialState, action) => {

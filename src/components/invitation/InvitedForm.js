@@ -19,25 +19,45 @@ const InvitedForm = ({ data, carColors }) => {
     
     return (
         <>
-            <Text style={tw`mb-2`}>Nombre del visitante</Text>
+            <View style={tw`mb-2 flex flex-row`}>
+                <Text style={tw`mb-2`}>Nombre del visitante</Text>
+                <Text style={{ color: 'red', marginLeft: 5 }}>*</Text>
+            </View>
             <Input
                 leftIcon={<Icon type='font-awesome' name='user' size={25} color='black' />}
                 inputStyle={tw`ml-3 text-sm`}
                 inputContainerStyle={tw`border pl-2 rounded-md`}
                 containerStyle={tw`flex-1 p-0`}
                 labelStyle={{ color: '#133C60' }}
-                placeholder="Nombre del visitante"
+                placeholder="Ej. Juan Gonzales."
                 value={inputState.name}
                 onChangeText={(value) => handleInputChange(value, 'name')}
             />
-            <Text style={tw`mb-2`}>Modelo del carro</Text>
+            <Text style={tw`mb-2`}>Descripción del equipo</Text>
+            <Input
+                maxLength={250}
+                autoCapitalize={"words"}
+                autoComplete={"off"}
+                leftIcon={<Icon type='font-awesome' name='wrench' size={25} color='black' />}
+                inputStyle={tw`ml-3 text-sm`}
+                inputContainerStyle={tw`border pl-2 rounded-md`}
+                containerStyle={tw`flex-1 p-0`}
+                labelStyle={{ color: '#133C60' }}
+                placeholder="Ej. Bocina, Muebles, Herramientas."
+                value={inputState.equip_description}
+                onChangeText={(value) => handleInputChange(value, 'equip_description')}
+            />
+            <View style={tw`mb-2 flex flex-row`}>
+                <Text style={tw`mb-2`}>Modelo del carro</Text>
+                <Text style={{ color: 'red', marginLeft: 5 }}>*</Text>
+            </View>
             <Input
                 leftIcon={<Icon type='font-awesome' name='car' size={25} color='black' />}
                 inputStyle={tw`ml-3 text-sm`}
                 inputContainerStyle={tw`border pl-2 rounded-md`}
                 containerStyle={tw`flex-1 p-0`}
                 labelStyle={{ color: '#133C60' }}
-                placeholder="Modelo del carro"
+                placeholder="Ej. Yaris, Suzuki / Peatón."
                 value={inputState.car_model}
                 onChangeText={(value) => handleInputChange(value, 'car_model')}
             />

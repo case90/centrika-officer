@@ -23,36 +23,59 @@ const ProviderForm = ({ data, employeeQty, carColors }) => {
     
     return (
         <>
-            <Text style={tw`mb-2`}>Nombre del proveedor</Text>
+            <View style={tw`mb-2 flex flex-row`}>
+                <Text style={tw`mb-2`}>Nombre del proveedor</Text>
+                <Text style={{ color: 'red', marginLeft: 5 }}>*</Text>
+            </View>
             <Input
                 leftIcon={<Icon type='font-awesome' name='user' size={25} color='black' />}
                 inputStyle={tw`ml-3 text-sm`}
                 inputContainerStyle={tw`border pl-2 rounded-md`}
                 containerStyle={tw`flex-1 p-0`}
                 labelStyle={{ color: '#133C60' }}
-                placeholder="Nombre del proveedor"
+                placeholder="Ej. Izzi, Jardinería Jaime, Constructora Coner."
                 value={inputState.name}
                 onChangeText={(value) => handleInputChange(value, 'name')}
             />
-            <Text style={tw`mb-2`}>Equipo</Text>
+            <Text style={tw`mb-2`}>Motivo de visita</Text>
             <Input
-                leftIcon={<Icon type='font-awesome' name='handshake-o' size={25} color='black' />}
+                maxLength={250}
+                autoCapitalize={"words"}
+                autoComplete={"off"} s
+                inputStyle={tw`ml-3 text-sm`}
+                leftIcon={<Icon type='font-awesome' name='briefcase' size={25} color='black' />}
+                inputContainerStyle={tw`border pl-2 rounded-md`}
+                containerStyle={tw`flex-1 p-0`}
+                labelStyle={{ color: '#133C60' }}
+                placeholder="Instalacion de internet, Jardinería."
+                value={inputState.reason}
+                onChangeText={(value) => handleInputChange(value, 'reason')}
+            />
+            <Text style={tw`mb-2`}>Descripción del equipo</Text>
+            <Input
+                maxLength={250}
+                autoCapitalize={"words"}
+                autoComplete={"off"}
+                leftIcon={<Icon type='font-awesome' name='wrench' size={25} color='black' />}
                 inputStyle={tw`ml-3 text-sm`}
                 inputContainerStyle={tw`border pl-2 rounded-md`}
                 containerStyle={tw`flex-1 p-0`}
                 labelStyle={{ color: '#133C60' }}
-                placeholder="Equipo"
+                placeholder="Equipo, Palas, Extenciones. "
                 value={inputState.equip_description}
                 onChangeText={(value) => handleInputChange(value, 'equip_description')}
             />
-            <Text style={tw`mb-2`}>Modelo del carro</Text>
+            <View style={tw`mb-2 flex flex-row`}>
+                <Text style={tw`mb-2`}>Modelo del carro</Text>
+                <Text style={{ color: 'red', marginLeft: 5 }}>*</Text>
+            </View>
             <Input
                 leftIcon={<Icon type='font-awesome' name='car' size={25} color='black' />}
                 inputStyle={tw`ml-3 text-sm`}
                 inputContainerStyle={tw`border pl-2 rounded-md`}
                 containerStyle={tw`flex-1 p-0`}
                 labelStyle={{ color: '#133C60' }}
-                placeholder="Modelo del carro"
+                placeholder="Ej. Yaris, Suzuki / Peatón."
                 value={inputState.car_model}
                 onChangeText={(value) => handleInputChange(value, 'car_model')}
             />
