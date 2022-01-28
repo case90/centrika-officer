@@ -68,7 +68,6 @@ const fetchInvitationById = (dispatch) => {
                 const user = JSON.parse(await AsyncStorage.getItem('user'));
                 const token = user.token
                 const data = await httpClient.get(`invitations/${id}`, {'Authorization': token});
-                console.log(`invitations/${id}`)
                 dispatch({ 
                     type: 'SET_INVITATION_DATA', 
                     payload: { data } 
