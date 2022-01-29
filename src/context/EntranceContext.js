@@ -97,6 +97,7 @@ const entranceReducer = (state = initialState, action) => {
                 error: false,
                 message: "",
                 fetchingData: false,
+                neighbor: action.payload.response.address.neighbor.name,
                 address: [action.payload.response.address],
                 street_id: parseInt(action.payload.response.address.street_id),
                 number: action.payload.response.address.number,
