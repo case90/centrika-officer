@@ -10,6 +10,7 @@ const initialState = {
     fetchingData: false,
     incoming_type_id: INVITED_ENTRY_TYPE,
     employee_quantity: 1,
+    reason_id: null,
     data: [],
     employees: [],
     car_colors: [],

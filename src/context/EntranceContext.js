@@ -171,7 +171,7 @@ const prepareEntranceRequest = (entranceState, incomeState) => {
         car_color_id: incomeState.data[0].car_color_id,
         equip_description: incomeState.data[0].equip_description,
         reason: incomeState.data[0].equip_description,
-        reason_id: 1, // Cambiar por el valor del select
+        reason_id: incomeState.data[0].reason_id,
         employee_quantity: incomeState.employee_quantity,
         employees: incomeState.employees
     }
