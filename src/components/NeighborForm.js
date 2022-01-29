@@ -59,7 +59,6 @@ const NeighborForm = () => {
                             labelStyle={{ color: '#133C60' }}
                             maxLength={50}
                             value={state.neighbor}
-                            keyboardType='number-pad'
                             placeholder="Nombre del vecino a visitar"
                             onChangeText={(name) => updateNeighborName(name)}
                         />

@@ -155,7 +155,7 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                             containerStyle={tw`w-5/12`}
                             buttonStyle={[{backgroundColor: '#ee8920'}]}
                             title="Guardar Entrada"
-                            onPress={() => store(entranceState)}
+                            onPress={() => store(entranceState, incomeState)}
                         />
                     </View>               
                 </View>

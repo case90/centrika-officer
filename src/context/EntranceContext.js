@@ -107,6 +107,84 @@ const entranceReducer = (state = initialState, action) => {
 
 }
 
+const createEntrance = async(data, dispatch) => {
+    try {
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+        const token = user.token
+        const response = await httpClient.post('incomings', data, { 'Authorization': token });
+        if(response.status){
+            dispatch({type: 'CLEAR_STATE' });
+            Alert.alert(
+                "Correcto",
+                response.message,
+                [{ 
+                    text: "Aceptar",
+                    onPress: () => rootNavigation.navigate('Inicio')
+                }]
+            )
+        }else{
+            Alert.alert(
+                "Ha ocurrido un error",
+                response.message,
+                [{ 
+                    text: "Aceptar",
+                }]
+            )
+        }
+    } catch (error) {
+        Alert.alert(
+            "Ha ocurrido un error",
+            "Por el momento el servicio no está disponible, inténtelo mas tarde.",
+            [{ 
+                text: "Aceptar",
+            }]
+        )
+    }
+    
+}
+
+const prepareEntranceRequest = (entranceState, incomeState) => {
+    
+    if(!entranceState.car_tag)
+        return { error: true, message: 'Debe capturar una placa.' }
+    if(!entranceState.street_id)
+        return { error: true, message: 'Debe seleccionar una calle.' }
+    if(!entranceState.number)
+        return { error: true, message: 'Debe capturar una número de casa valido.' }
+    if(!entranceState.neighbor)
+        return { error: true, message: 'Debe capturar una nombre de vecino.' }
+    if(incomeState.data.length === 0)
+        return { error: true, message: 'Debe agregar un tipo de entrada.' }
+    
+    let result = {
+        error: false,
+        incoming_type_id: incomeState.incoming_type_id,
+        incoming_time: moment().format('YYYY-MM-DD H:m:s'),
+        car_tag: entranceState.car_tag,
+        street_id: entranceState.street_id,
+        number: entranceState.number,
+        neighbor: entranceState.neighbor,
+        name: incomeState.data[0].name,
+        company: incomeState.data[0].name,
+        car_model: incomeState.data[0].car_model,
+        car_color_id: incomeState.data[0].car_color_id,
+        equip_description: incomeState.data[0].equip_description,
+        reason: incomeState.data[0].equip_description,
+        reason_id: 1, // Cambiar por el valor del select
+        employee_quantity: incomeState.employee_quantity,
+        employees: incomeState.employees
+    }
+
+    if(incomeState.incoming_type_id == PROVIDER_ENTRY_TYPE){
+        for (let i = 0; i < result.employees.length; i++) {
+            if((!result.employees[i].name.trim() || !result.employees[i].surname.trim()) && result.employees.length > 0 ){
+                return { error: true, message: 'Debe capturar un nombre y apellido para cada empleado.' }
+            }
+        }
+    }
+    return result;
+}
+
 const getProviderObjectFormatType = (incoming) => {
     return {
         incoming_type_id:  incoming.incoming_type_id,
@@ -153,48 +231,19 @@ const createIncomeStateFormat = (incoming) => {
 }
 
 const store = (dispatch) => {
-    return async (data) => {
-        try {
-            const validated = validateInvitationData(data);
-            if(!validated.error){
-                dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
-                const user = JSON.parse(await AsyncStorage.getItem('user'));
-                const token = user.token
-                const response = await httpClient.post('invitations', data, { 'Authorization': token });
-                if(response){
-                    dispatch({ type: 'CLEAR_STATE' })
-                    rootNavigation.navigate('QrView', { data: response })
-                }else{
-                    Alert.alert(
-                        "Ha ocurrido un error",
-                        'No ha sido posible crear el registro.',
-                        [{ 
-                            text: "Aceptar", 
-                            onPress: dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
-                        }]
-                    )
-                }
-            }else{
-                Alert.alert(
-                    "Ha ocurrido un error",
-                    validated.message,
-                    [{ 
-                        text: "Aceptar",
-                    }]
-                )
-            }
-            
-        } catch (error) {
-            dispatch({ 
-                type: 'SET_REQUEST_ERROR', 
-                payload: { 
-                    error: true, 
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
-                } 
-            });
-        }
-        
-        
+    return async(entranceState, incomeState) => {
+        const reqData = prepareEntranceRequest(entranceState, incomeState);
+        if(!reqData.error){
+            createEntrance(reqData, dispatch);
+        }else{
+            Alert.alert(
+                "Ha ocurrido un error",
+                reqData.message,
+                [{ 
+                    text: "Aceptar",
+                }]
+            )
+        }        
     }
 }
 
