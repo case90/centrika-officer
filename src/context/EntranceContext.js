@@ -17,7 +17,7 @@ const initialState = {
     car_tag: "",
     name: "",
     number: "",
-    neighbor: "",
+    neighbor: null,
     car_model: "",
     reason_id: 1,
     car_color_id: null,
@@ -52,12 +52,10 @@ const entranceReducer = (state = initialState, action) => {
                 error: false,
                 message: ""
             }
-        case 'SET_ADDRESS_NEIGHBOR':
+        case 'SET_NEIGHBOR_NAME':
             return { 
                 ...state,
-                address: action.payload.address,
-                number: action.payload.number,
-                street_id: action.payload.street_id,
+                neighbor: action.payload.neighbor,
                 fetchingData: false,
                 error: false,
                 message: ""
@@ -82,6 +80,8 @@ const entranceReducer = (state = initialState, action) => {
         case 'DELETE_NEIGHBOR_ADDRESS':
             let address = state.address.filter((item) => item.id !== action.payload.id)
             return { ...state, address }
+        case 'UPDATE_NEIGHBOR_NAME':
+            return { ...state, neighbor: action.payload.neighbor }
         case 'LOAD_INVITATION_DATA':
             return { 
                 ...state,
@@ -214,56 +214,6 @@ const clearState = (dispatch) => {
     }
 }
 
-const fetchAddress = (dispatch) => {
-    return async(number, street_id) => {
-        try {
-            if(number && street_id){
-                dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
-                const user = JSON.parse(await AsyncStorage.getItem('user'));
-                const token = user.token
-                const response = await httpClient.get(`addresses?number=${number}&street_id=${street_id}`, {'Authorization': token});
-                if(response.length > 0){
-                    dispatch({ 
-                        type: 'SET_ADDRESS_NEIGHBOR', 
-                        payload: { 
-                            address: response,
-                            number,
-                            street_id
-                        } 
-                    });
-                }else{
-                    Alert.alert(
-                        "Ha ocurrido un error",
-                        `No se encontraron registros para la dirección con número ${number} calle ${street_id}.`,
-                        [{ 
-                            text: "Aceptar", 
-                            onPress: dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
-                        }]
-                    )
-                }
-            }else{
-                Alert.alert(
-                    "Ha ocurrido un error",
-                    'Debe seleccionar una calle y escribir un número valido de casa.',
-                    [{ 
-                        text: "Aceptar", 
-                        onPress: dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
-                    }]
-                )
-            }
-         
-        } catch (error) {
-            dispatch({ 
-                type: 'SET_REQUEST_ERROR', 
-                payload: { 
-                    error: true, 
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
-                } 
-            });
-        }
-    }
-}
-
 const loadInvitation = (dispatch) => {
     return async (data) => {
         if(data){
@@ -302,6 +252,15 @@ const setAddressNumber = (dispatch) => {
     }
 }
 
+const updateNeighborName = (dispatch) => {
+    return async (name) => {
+        dispatch({ 
+            type: 'UPDATE_NEIGHBOR_NAME', 
+            payload: { neighbor: name } 
+        });
+    }
+}
+
 const setFetchTagResponse = (dispatch) => {
     return async(car_tag, setIncomeData) => {
         try {
@@ -326,6 +285,52 @@ const setFetchTagResponse = (dispatch) => {
                     }]
                 )
             }
+        } catch (error) {
+            dispatch({ 
+                type: 'SET_REQUEST_ERROR', 
+                payload: { 
+                    error: true, 
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.' 
+                } 
+            });
+        }
+    }
+}
+
+const fetchNeighborAddress = (dispatch) => {
+    return async(number, street_id) => {
+        try {
+            if(number && street_id){
+                dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+                const user = JSON.parse(await AsyncStorage.getItem('user'));
+                const token = user.token
+                const response = await httpClient.get(`addresses?number=${number}&street_id=${street_id}`, {'Authorization': token});
+                if(response.length > 0){
+                    dispatch({ 
+                        type: 'SET_NEIGHBOR_NAME', 
+                        payload: { neighbor: response[0].neighbor.name } 
+                    });
+                }else{
+                    Alert.alert(
+                        "Ha ocurrido un error",
+                        `No se encontraron registros para la dirección con número ${number} calle ${street_id}.`,
+                        [{ 
+                            text: "Aceptar", 
+                            onPress: dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
+                        }]
+                    )
+                }
+            }else{
+                Alert.alert(
+                    "Ha ocurrido un error",
+                    'Debe seleccionar una calle y escribir un número valido de casa.',
+                    [{ 
+                        text: "Aceptar", 
+                        onPress: dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
+                    }]
+                )
+            }
+         
         } catch (error) {
             dispatch({ 
                 type: 'SET_REQUEST_ERROR', 
@@ -393,11 +398,12 @@ export const { Context, Provider } = createDataContext(
     { 
         store, 
         clearState,
-        fetchAddress,
         loadInvitation,
         setCarTagValue,
         setAddressNumber,
+        updateNeighborName,
         setFetchTagResponse,
+        fetchNeighborAddress,
         handleSelectedStreet,
         deleteNeighborAddress,
         initEntranceDefaultState,

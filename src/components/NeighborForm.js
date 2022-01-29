@@ -8,10 +8,10 @@ import { Input, Button, Icon } from 'react-native-elements';
 const NeighborForm = () => {
     const { 
         state, 
-        fetchAddress,
         setAddressNumber,
+        updateNeighborName,
         handleSelectedStreet,
-        deleteNeighborAddress,
+        fetchNeighborAddress,
     } = useContext(EntranceContext);
 
     const onSelectAddress = useCallback((item) => {
@@ -44,26 +44,29 @@ const NeighborForm = () => {
                 keyboardType='number-pad'
                 placeholder="Escriba un número de casa"
                 onChangeText={(number) => setAddressNumber(number)}
-                onSubmitEditing={(e) => fetchAddress(e.nativeEvent.text, state.street_id)}
+                onSubmitEditing={(e) => fetchNeighborAddress(e.nativeEvent.text, state.street_id)}
             />
             <View>
                 {   
-                    state.address
+                    state.neighbor
                     ?
-                        state.address.map((item) => {
-                            return (
-                                <View key={item.id} style={tw`flex-row rounded-md mb-3 border border-gray-400 items-center`}>
-                                    <TouchableOpacity 
-                                        style={tw`rounded-l-md p-3 bg-red-700`}
-                                        onPress={() => deleteNeighborAddress(item.id)}
-                                    >
-                                        <Icon type='font-awesome' name='trash' size={25} color='white' />
-                                    </TouchableOpacity>
-                                    <Text style={tw`ml-3 text-black`}>{item.neighbor.name}</Text>
-                                </View>
-                            )
-                        })
-                    :
+                        <View style={tw`flex-row mb-3 items-center`}>
+                            <Input
+                                leftIcon={(
+                                    <Icon type='font-awesome' name='user' size={25} color="black" />
+                                )}
+                                inputStyle={tw`ml-3 text-sm`}
+                                inputContainerStyle={tw`border pl-2 pr-2 rounded-md`}
+                                containerStyle={tw`flex-1 p-0`}
+                                labelStyle={{ color: '#133C60' }}
+                                maxLength={50}
+                                value={state.neighbor}
+                                keyboardType='number-pad'
+                                placeholder="Nombre del vecino a visitar"
+                                onChangeText={(name) => updateNeighborName(name)}
+                            />
+                        </View>
+                        :
                     null
                 }
             </View>
