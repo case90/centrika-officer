@@ -34,12 +34,9 @@ const incomeTypeReducer = (state = initialState, action) => {
             let data = state.data.filter((item) => item.id !== action.payload.id);
             return { ...state, data }
         case 'ADD_ENTRY_DATA_ITEM':
-            let newData = [action.payload.data];
-            if(action.payload.incoming_type_id === INVITED_ENTRY_TYPE)
-                newData = [...state.data, action.payload.data];
             return { 
                 ...state, 
-                data: newData,
+                data: [action.payload.data],
                 employee_quantity: 1,
                 employees: populateEmployeeArray(1),
             }
