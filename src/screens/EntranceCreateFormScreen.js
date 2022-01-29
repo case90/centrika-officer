@@ -14,7 +14,7 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
     const { 
         state: entranceState, 
         store,
-        clearState,
+        clearState: clearEntranceState,
         loadInvitation,
         setCarTagValue,
         setFetchTagResponse,
@@ -23,6 +23,7 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
 
     const { 
         state: incomeState,
+        clearState: clearIncomeState,
         handleLoadEntryTypeData,
         initIncomeTypeDefaultState,
         handleEntryTypeContentRender
@@ -43,7 +44,8 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
         }
             
         const unsubscribe = navigation.addListener('blur', () => {
-            clearState()
+            clearEntranceState()
+            clearIncomeState()
         });
 
         return unsubscribe;

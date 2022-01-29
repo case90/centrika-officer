@@ -25,7 +25,11 @@ const incomeTypeReducer = (state = initialState, action) => {
 
     switch(action.type){
         case 'CLEAR_STATE':
-            return { ...initialState }
+            return { 
+                ...initialState,
+                car_colors: state.car_colors,
+                reason_list: state.reason_list,
+            }
         case 'DELETE_ENTRY_TYPE_ITEM':
             let data = state.data.filter((item) => item.id !== action.payload.id);
             return { ...state, data }
