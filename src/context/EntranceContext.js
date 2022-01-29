@@ -107,16 +107,6 @@ const entranceReducer = (state = initialState, action) => {
 
 }
 
-const validateInvitationData = (data) => {
-    let result = { error: false }
-    if(!data.initial_date || !data.final_date)
-        return {...result, error: true, message: 'Debe seleccionar una fecha de entrada y una de salida.'}
-    if(data.data.length === 0)
-        return {...result, error: true, message: 'Debe agregar un tipo de entrada.'}
-
-    return result
-}
-
 const getProviderObjectFormatType = (incoming) => {
     return {
         incoming_type_id:  incoming.incoming_type_id,
