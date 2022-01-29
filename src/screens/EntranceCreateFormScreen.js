@@ -111,7 +111,8 @@ const EntranceCreateFormScreen = ({ route, navigation }) => {
                         labelStyle={{ color: '#133C60' }}
                         placeholder="Escriba una placa"
                         value={entranceState.car_tag}
-                        autoCapitalize='none'
+                        autoCapitalize='characters'
+                        maxLength={10}
                         onChangeText={(car_tag) => setCarTagValue(car_tag)}
                         onSubmitEditing={(e) => handleFetchByTag(e.nativeEvent.text)}
                     />
