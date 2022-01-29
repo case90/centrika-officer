@@ -3,16 +3,21 @@ export const VisitorSchema = {
     car_model: '',
     car_tag: '',
     car_color_id: null,
-    equip_description: ''
+    equip_description: '',
+    reason_id:  null,
+    reason: '',
+    employee_quantity: null
 };
 
 export const ServiceSchema = {
     name: '',
     car_model: '',
     car_tag: '',
+    car_color_id: null,
     equip_description:'',
     reason_id:  null,
-    car_color_id: null
+    reason: '',
+    employee_quantity: null
 };
 
 export const ProviderSchema = {
@@ -20,7 +25,8 @@ export const ProviderSchema = {
     car_model: '',
     car_tag: '',
     car_color_id: null,
+    equip_description:'',
+    reason_id:  null,
     reason: '',
-    equip_description: '',
     employee_quantity: null
 };
