@@ -30,7 +30,7 @@ const NeighborForm = () => {
             <Input
                 rightIcon={(
                     <TouchableOpacity
-                        onPress={() => fetchAddress(state.number, state.street_id)}    
+                        onPress={() => fetchNeighborAddress(state.number, state.street_id)}    
                     >
                         <Icon type='font-awesome' name='search' size={25} color='#ee8920' />
                     </TouchableOpacity>
